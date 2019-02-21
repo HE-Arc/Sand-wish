@@ -1,7 +1,7 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-  <div>Home</div>
+  <div>Profile</div>
   {% if user.is_authenticated %}
     User: {{ user.get_username }}
     <a href="{% url 'logout'%}">Logout</a>

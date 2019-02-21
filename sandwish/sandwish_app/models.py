@@ -1,17 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# - USER MODEL -----------------------------------------------------------------
-
-# class User(models.Model):
-#     username = models.CharField(max_length=32)
-#     firstname = models.CharField(max_length=32)
-#     lastname = models.CharField(max_length=32)
-#     email = models.CharField(max_length=128)
-#
-#     def __str__(self):
-#         return self.firstname + self.lastname
-
 # - WISHLIST MODEL -------------------------------------------------------------
 
 class Wishlist(models.Model):
