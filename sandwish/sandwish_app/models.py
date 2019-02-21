@@ -1,15 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # - USER MODEL -----------------------------------------------------------------
 
-class User(models.Model):
-    username = models.CharField(max_length=32)
-    firstname = models.CharField(max_length=32)
-    lastname = models.CharField(max_length=32)
-    email = models.CharField(max_length=128)
-
-    def __str__(self):
-        return self.firstname + self.lastname
+# class User(models.Model):
+#     username = models.CharField(max_length=32)
+#     firstname = models.CharField(max_length=32)
+#     lastname = models.CharField(max_length=32)
+#     email = models.CharField(max_length=128)
+#
+#     def __str__(self):
+#         return self.firstname + self.lastname
 
 # - WISHLIST MODEL -------------------------------------------------------------
 
@@ -17,7 +18,7 @@ class Wishlist(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
 
-    user_id = models.ForeignKey('User', on_delete = models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete = models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -42,7 +43,7 @@ class Contribution(models.Model):
     value = models.DecimalField(max_digits=8, decimal_places=2)
 
     gift = models.ForeignKey('Gift', on_delete = models.CASCADE)
-    user = models.ForeignKey('User', on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
 
     def __str__(self):
         return self.value
