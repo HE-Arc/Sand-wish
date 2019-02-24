@@ -7,5 +7,6 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("signup/", views.signup, name="signup"),
     path("admin/", admin.site.urls),
-    path("<str:slug>/", views.ProfileView.as_view(), name="profile"),
+    path("<slug:slug>/", views.ProfileView.as_view(), name="profile"),
+    path("<slug:username>/wishlist/<pk>", views.WhishlistView.as_view(), name="whishlist"),
 ]

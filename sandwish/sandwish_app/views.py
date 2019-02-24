@@ -39,3 +39,22 @@ class ProfileView(generic.DetailView):
         context["wishlists"] = Wishlist.objects.filter(user_id=profiles_user.id)
 
         return context
+
+class WhishlistView(generic.ListView):
+    template_name = "sandwish_app/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # profiles_user = context["object"]
+
+        # context["wishlists"] = Wishlist.objects.filter(user_id=profiles_user.id)
+
+        return context
+
+    def get_queryset(self):
+        username = self.kwargs["username"]
+        pk = self.kwargs["pk"]
+
+        whishlists_user = User.objects.get(username=username)
+        wishlist = Wishlist.objects.filter(id=pk).filter(user_id=whishlists_user.id)
+        return wishlist
