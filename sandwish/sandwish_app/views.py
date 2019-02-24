@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate
 from .models import User, Wishlist
 from sandwish_app.forms import SignUpForm
 
+from .models import Wishlist #, Gift, Contribution
 
 def index(request):
     context = {}
@@ -41,13 +42,13 @@ class ProfileView(generic.DetailView):
         return context
 
 class WhishlistView(generic.ListView):
-    template_name = "sandwish_app/index.html"
+    template_name = "sandwish_app/wishlist.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # profiles_user = context["object"]
 
-        # context["wishlists"] = Wishlist.objects.filter(user_id=profiles_user.id)
+        context["wishlists_user"] = context["object_list"][0]
+        context["wishlist"] = context["object_list"][1]
 
         return context
 
@@ -56,5 +57,5 @@ class WhishlistView(generic.ListView):
         pk = self.kwargs["pk"]
 
         whishlists_user = User.objects.get(username=username)
-        wishlist = Wishlist.objects.filter(id=pk).filter(user_id=whishlists_user.id)
-        return wishlist
+        wishlist = Wishlist.objects.get(id=pk, user_id=whishlists_user.id)
+        return whishlists_user, wishlist
