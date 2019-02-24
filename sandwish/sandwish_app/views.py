@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 # from .models import User
 from sandwish_app.forms import SignUpForm
 
+from .models import Wishlist #, Gift, Contribution
 
 def index(request):
     context = {}
@@ -39,3 +40,9 @@ class ProfileView(generic.DetailView):
     #     # context[]
 
     #     return context
+
+class WishlistView(generic.DetailView):
+
+    model = Wishlist
+    slug_field = "title"
+    template_name = "sandwish_app/wishlist.html"
