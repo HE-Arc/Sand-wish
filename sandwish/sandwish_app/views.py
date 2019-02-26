@@ -28,6 +28,9 @@ def signup(request):
         form = SignUpForm()
     return render(request, "registration/signup.html", {"form": form})
 
+def login_redirect(request):
+    return redirect("profile", request.user.username)
+
 class ProfileView(generic.DetailView):
     model=User
     slug_field = "username"
