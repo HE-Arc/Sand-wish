@@ -10,4 +10,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("<slug:slug>/", views.ProfileView.as_view(), name="profile"),
     path("<slug:username>/wishlist/<pk>", views.WhishlistView.as_view(), name="whishlist"),
+
+    path('/gift/delete/<pk>/', views.GiftDelete.as_view(), name="gift-delete"),
 ]

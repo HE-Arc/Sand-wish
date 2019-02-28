@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 
 # for signup
 from django.contrib.auth import login, authenticate
-from .models import User, Wishlist
+from .models import User, Wishlist, Gift
 from sandwish_app.forms import SignUpForm
 
 from .models import Wishlist, Gift #, Contribution
@@ -64,3 +64,12 @@ class WhishlistView(generic.ListView):
         whishlists_user = User.objects.get(username=username)
         wishlist = Wishlist.objects.get(id=pk, user_id=whishlists_user.id)
         return whishlists_user, wishlist
+
+class GiftDelete(generic.DeleteView):
+    model = Gift
+
+    def get_success_url(self):
+        removed_gift = self.object
+        wishlist = removed_gift.wishlist_id
+        user = wishlist.user_id
+        return reverse_lazy("whishlist", kwargs={"username" : user.username, "pk" : wishlist.id})
