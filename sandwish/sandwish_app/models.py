@@ -21,7 +21,7 @@ class Gift(models.Model):
     link = models.CharField(max_length=256)
     validated = models.BooleanField(default=False)
 
-    user = models.ForeignKey('Wishlist', on_delete = models.CASCADE)
+    wishlist = models.ForeignKey('Wishlist', on_delete = models.CASCADE)
 
     def __str__(self):
         return self.name

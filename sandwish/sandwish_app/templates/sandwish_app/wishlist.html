@@ -3,7 +3,19 @@
 {% block content %}
 
     <h1>{{ wishlist.title }}</h1>
-    {{wishlists_user.username}}
+    <p>{{wishlists_user.username}}<p>
     <p>{{ wishlist.description }}</p>
+
+    {% for g in wishlist %}
+
+        {% if user.is_authenticated %}
+            User: {{ user.get_username }}
+
+        {% else %}
+
+        {% endif %}
+
+    {% endfor %}
+
 
 {% endblock %}
