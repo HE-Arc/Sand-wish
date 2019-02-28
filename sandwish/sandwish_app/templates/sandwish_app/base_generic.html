@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/general.css' %}">
         {% block title %}<title>SandWish</title>{% endblock %}
         {% load bootstrap4 %}
         {% bootstrap_css %}

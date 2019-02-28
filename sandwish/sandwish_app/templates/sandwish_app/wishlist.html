@@ -3,19 +3,31 @@
 {% block content %}
 
     <h1>{{ wishlist.title }}</h1>
-    <p>{{wishlists_user.username}}<p>
+    <p>{{ wishlists_user.username }}<p>
     <p>{{ wishlist.description }}</p>
 
-    {% for g in wishlist %}
+    <input type="submit" value="Ajouter"/>
 
-        {% if user.is_authenticated %}
-            User: {{ user.get_username }}
+    {% for g in gifts %}
+            <div id="gift-item" class="border my-2">
+                <img class="gift-img" src="{{ g.image }}" />
 
-        {% else %}
+                <div class="gift-infos">
+                    <a href="{{ g.link }}" target="_blank">
+                        <h4>
+                            {{ g.name }}
+                        </h4>
+                    </a>
+                    <div class="">
+                        {{ g.price }}
+                    </div>
+                </div>
 
-        {% endif %}
-
+                <div class="gift-actions">
+                    <input type="submit" value="Valider"/>
+                    <input type="submit" value="Supprimer"/>
+                </div>
+            </div>
     {% endfor %}
-
 
 {% endblock %}
