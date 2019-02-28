@@ -1,23 +1,18 @@
 
-#gift-item
-{
+#gift-item {
     box-sizing: border-box;
     padding: 10px;
 }
 
-.gift-img
-{
+.gift-img {
     display: inline-block;
     height: 100px;
 }
 
-.gift-infos
-{
+.gift-infos {
     display: inline-block;
 }
 
-.gift-actions
-{
-    display: inline-block;
+.gift-actions {
     float: right;
 }

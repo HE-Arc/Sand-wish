@@ -7,27 +7,28 @@
     <p>{{ wishlist.description }}</p>
 
     <input type="submit" value="Ajouter"/>
+    <a href="{% url 'gift-create' wishlists_user.username wishlist.id %}">Ajouter un nouveau cadeau</a>
 
     {% for g in gifts %}
-            <div id="gift-item" class="border my-2">
-                <img class="gift-img" src="{{ g.image }}" />
+        <div id="gift-item" class="border my-2">
+            <img class="gift-img" src="{{ g.image }}" />
 
-                <div class="gift-infos">
-                    <a href="{{ g.link }}" target="_blank">
-                        <h4>
-                            {{ g.name }}
-                        </h4>
-                    </a>
-                    <div class="">
-                        {{ g.price }}
-                    </div>
-                </div>
-
-                <div class="gift-actions">
-                    <input type="submit" value="Valider"/>
-                    <input type="submit" value="Supprimer"/>
+            <div class="gift-infos">
+                <a href="{{ g.link }}" target="_blank">
+                    <h4>
+                        {{ g.name }}
+                    </h4>
+                </a>
+                <div class="">
+                    {{ g.price }}
                 </div>
             </div>
+
+            <div class="gift-actions">
+                <input type="submit" value="Valider"/>
+                <input type="submit" value="Supprimer"/>
+            </div>
+        </div>
     {% endfor %}
 
 {% endblock %}
