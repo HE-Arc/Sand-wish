@@ -19,8 +19,12 @@
             {% endfor %}
         </table>
 
+        <a href={% url 'wishlist-create' %} class="btn btn-success btn-sm">Create a wishlist</a>
+
         <a href="{% url 'logout' %}">Logout</a>
     {% else %}
         <a href="{% url 'login' %}">Login</a>
     {% endif %}
+
+
 {% endblock %}

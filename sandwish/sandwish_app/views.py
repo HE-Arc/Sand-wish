@@ -62,3 +62,14 @@ class WhishlistView(generic.ListView):
         whishlists_user = User.objects.get(username=username)
         wishlist = Wishlist.objects.get(id=pk, user_id=whishlists_user.id)
         return whishlists_user, wishlist
+
+class WishlistCreateView(generic.CreateView):
+    model = Wishlist
+    fields = ['title', 'description']
+
+    def form_valid(self, form):
+        print("---------------------FORM VALID------------------------")
+        self.object = form.save(commit=False)
+        self.object.user_id = self.request.user
+        self.object.save()
+        return super().form_valid(form)

@@ -1,0 +1,14 @@
+{% extends "sandwish_app/base_generic.html" %}
+
+{% block title %}Create Wishlist{% endblock %}
+
+{% block content %}
+<div class="container">
+<form action="" method="post">
+  {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save" />
+</form>
+
+</div>
+{% endblock %}
