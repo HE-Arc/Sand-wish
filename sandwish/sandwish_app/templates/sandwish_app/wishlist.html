@@ -6,29 +6,29 @@
     <p>{{ wishlists_user.username }}<p>
     <p>{{ wishlist.description }}</p>
 
-    <input type="submit" value="Ajouter un cadeau"/>
-    <input type="submit" value="Supprimer cette liste"/>
+    <input type="submit" value="Ajouter"/>
+    <a href="{% url 'gift-create' wishlists_user.username wishlist.id %}">Ajouter un nouveau cadeau</a>
 
     {% for gift in gifts %}
-            <div id="gift-item" class="border my-2">
-                <img class="gift-img" src="{{ gift.image }}" />
+        <div id="gift-item" class="border my-2">
+            <img class="gift-img" src="{{ gift.image }}" />
 
-                <div class="gift-infos">
-                    <a href="{{ gift.link }}" target="_blank">
-                        <h4>
-                            {{ gift.name }}
-                        </h4>
-                    </a>
-                    <div class="">
-                        {{ gift.price }}
-                    </div>
-                </div>
-
-                <div class="gift-actions">
-                    <a href="" class="btn btn-primary btn">Valider</a>
-                    <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger btn">Delete</a>
+            <div class="gift-infos">
+                <a href="{{ gift.link }}" target="_blank">
+                    <h4>
+                        {{ gift.name }}
+                    </h4>
+                </a>
+                <div class="">
+                    {{ gift.price }}
                 </div>
             </div>
+
+            <div class="gift-actions">
+                <a href="" class="btn btn-primary btn">Valider</a>
+                <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger btn">Delete</a>
+            </div>
+        </div>
     {% endfor %}
 
 {% endblock %}

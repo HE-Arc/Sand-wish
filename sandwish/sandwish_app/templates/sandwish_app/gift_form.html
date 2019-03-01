@@ -1,0 +1,10 @@
+{% extends "sandwish_app/base_generic.html" %}
+
+{% block content %}
+    <div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Ajouter" />
+    </form>
+{% endblock %}
