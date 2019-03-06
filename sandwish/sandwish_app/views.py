@@ -91,7 +91,7 @@ class GiftCreateView(generic.CreateView):
 
     def form_valid(self, form):
         gift_wishlist = Wishlist.objects.get(id=self.kwargs.get("pk"))
-        gift_owner = form.instance.wishlist_id.user_id
+        gift_owner = gift_wishlist.user_id
 
         form.instance.wishlist_id = gift_wishlist # add foreign key
 

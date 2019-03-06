@@ -7,15 +7,18 @@
     <p>{{ wishlist.description }}</p>
 
     {% if is_wishlists_owner %}
-        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}">Ajouter un nouveau cadeau</a>
+        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">Ajouter un nouveau cadeau</a>
     {% endif %}
 
     {% for gift in gifts %}
-        <div id="gift-item" class="border my-2">
+        {% if gift.validated %}
+        <div class="gift-item border my-2 alert-success">
+        {% else %}
+        <div class="gift-item border my-2 ">
+        {% endif %}
             <img class="gift-img" src="{{ gift.image }}" />
-
             <div class="gift-infos">
-                <a href="{{ gift.link }}" target="_blank">
+                <a href="" >
                     <h4>
                         {{ gift.name }}
                     </h4>
@@ -25,12 +28,18 @@
                 </div>
             </div>
 
-            {% if is_wishlists_owner %}
-                <div class="gift-actions">
-                    <a href="" class="btn btn-primary btn">Valider</a>
-                    <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger btn">Delete</a>
-                </div>
-            {% endif %}
+
+        {% if is_wishlists_owner %}
+            <div class="gift-actions">
+                {% if gift.link != Null %}
+                    <a href="{{ gift.link }}" target="_blank" class="btn btn-info">Lien</a>
+                {% endif %}
+                {% if not gift.validated %}
+                    <a href="" class="btn btn-primary">Valider</a>
+                {% endif %}
+                <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger">Supprimer</a>
+            </div>
+        {% endif %}
         </div>
     {% endfor %}
 
