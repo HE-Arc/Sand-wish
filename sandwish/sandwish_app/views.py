@@ -68,8 +68,14 @@ class WishlistCreateView(generic.CreateView):
     fields = ['title', 'description']
 
     def form_valid(self, form):
-        print("---------------------FORM VALID------------------------")
         self.object = form.save(commit=False)
         self.object.user_id = self.request.user
         self.object.save()
         return super().form_valid(form)
+
+    def get_success_url(self):
+        new_wishlist = self.object
+        wishlist_id = new_wishlist.id
+        username = new_wishlist.user_id
+        print(username)
+        return reverse_lazy("whishlist", kwargs={"username" : username, "pk" : wishlist_id})
