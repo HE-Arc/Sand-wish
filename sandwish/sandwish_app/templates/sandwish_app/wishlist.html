@@ -3,11 +3,12 @@
 {% block content %}
 
     <h1>{{ wishlist.title }}</h1>
-    <p>{{ wishlists_user.username }}<p>
+    <p>{{ wishlists_owner.username }}<p>
     <p>{{ wishlist.description }}</p>
 
-    <input type="submit" value="Ajouter"/>
-    <a href="{% url 'gift-create' wishlists_user.username wishlist.id %}">Ajouter un nouveau cadeau</a>
+    {% if is_wishlists_owner %}
+        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}">Ajouter un nouveau cadeau</a>
+    {% endif %}
 
     {% for gift in gifts %}
         <div id="gift-item" class="border my-2">
@@ -24,10 +25,12 @@
                 </div>
             </div>
 
-            <div class="gift-actions">
-                <a href="" class="btn btn-primary btn">Valider</a>
-                <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger btn">Delete</a>
-            </div>
+            {% if is_wishlists_owner %}
+                <div class="gift-actions">
+                    <a href="" class="btn btn-primary btn">Valider</a>
+                    <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger btn">Delete</a>
+                </div>
+            {% endif %}
         </div>
     {% endfor %}
 

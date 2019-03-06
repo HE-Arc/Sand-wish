@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic, View
 from django.urls import reverse_lazy
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 # for signup
 from django.contrib.auth import login, authenticate
@@ -30,7 +32,7 @@ def login_redirect(request):
     return redirect("profile", request.user.username)
 
 class ProfileView(generic.DetailView):
-    model=User
+    model = User
     slug_field = "username"
     template_name = "sandwish_app/profile.html"
 
@@ -48,10 +50,12 @@ class WhishlistView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["wishlists_user"] = context["object_list"][0]
+        context["wishlists_owner"] = context["object_list"][0]
         context["wishlist"] = context["object_list"][1]
 
         context["gifts"] = Gift.objects.filter(wishlist_id=context["wishlist"].id)
+
+        context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
 
         return context
 
@@ -63,9 +67,17 @@ class WhishlistView(generic.ListView):
         wishlist = Wishlist.objects.get(id=pk, user_id=whishlists_user.id)
         return whishlists_user, wishlist
 
-
-class GiftDelete(generic.DeleteView):
+class GiftDeleteView(generic.DeleteView):
     model = Gift
+
+    def delete(self, *args, **kwargs):
+        gift_wishlist = Gift.objects.get(id=self.kwargs.get("pk")).wishlist_id
+        gift_owner = gift_wishlist.user_id
+
+        if gift_owner == self.request.user: # verify user is the wishlisht's owner
+            return super(GiftDeleteView, self).delete(*args, **kwargs)
+        return HttpResponseRedirect(reverse_lazy("whishlist", kwargs={"username": gift_owner.username, 
+                                                                      "pk": gift_wishlist.id}))
 
     def get_success_url(self):
         removed_gift = self.object
@@ -78,8 +90,15 @@ class GiftCreateView(generic.CreateView):
     fields = ["name", "price", "image", "link"]
 
     def form_valid(self, form):
-        form.instance.wishlist_id = Wishlist.objects.get(id=self.kwargs.get("pk")) # add foreign key
-        return super(GiftCreateView, self).form_valid(form)
+        gift_wishlist = Wishlist.objects.get(id=self.kwargs.get("pk"))
+        gift_owner = form.instance.wishlist_id.user_id
+
+        form.instance.wishlist_id = gift_wishlist # add foreign key
+
+        if gift_owner == self.request.user: # verify user is the wishlisht's owner
+            return super(GiftCreateView, self).form_valid(form)
+        return HttpResponseRedirect(reverse_lazy("whishlist", kwargs={"username": gift_owner.username, 
+                                                                      "pk": gift_wishlist.id}))
 
     def get_success_url(self):
         new_gift = self.object
