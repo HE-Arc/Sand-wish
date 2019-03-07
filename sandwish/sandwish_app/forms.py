@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Wishlist
 
 
 class SignUpForm(UserCreationForm):
@@ -11,3 +12,11 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+
+class WishlistCreationForm(forms.ModelForm):
+    title = forms.CharField(label="Wishlist's name", max_length=128)
+    description = forms.CharField(label="Wishlist's description")
+
+    class Meta:
+        model = Wishlist
+        fields = ["title", "description"]

@@ -4,6 +4,7 @@ from django.views import generic, View
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from .forms import WishlistCreationForm
 
 # for signup
 from django.contrib.auth import login, authenticate
@@ -40,9 +41,32 @@ class ProfileView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         profiles_user = context["object"]
 
+        context["profiles_owner"] = profiles_user
+        context["is_profiles_owner"] = context["profiles_owner"] == self.request.user
         context["wishlists"] = Wishlist.objects.filter(fk_user=profiles_user.id)
+        
+        if "form" not in kwargs:
+            context["form"] = WishlistCreationForm()
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        # handle wishlist creation
+        self.object = self.get_object() # owner
+        form = WishlistCreationForm(request.POST)
+        
+        form.instance.fk_user = self.object # add foreign key
+
+        if form.is_valid(): # validate form
+            if self.object == self.request.user: # verify user is the profile's owner
+                form.save()
+                return HttpResponseRedirect(reverse_lazy("whishlist", kwargs={"username": self.object.username, "pk": form.instance.id}))
+            return HttpResponseRedirect(reverse_lazy("profile", kwargs={"slug": self.object.username}))
+        else:
+            # handle invalid form values
+            context = self.get_context_data(**kwargs)
+            context.update({"form": form})
+            return self.render_to_response(context)        
 
 class WhishlistView(generic.ListView):
     template_name = "sandwish_app/wishlist.html"
@@ -103,5 +127,5 @@ class GiftCreateView(generic.CreateView):
     def get_success_url(self):
         new_gift = self.object
         wishlist = new_gift.fk_wishlist
-        user = wishlist.fk_user
-        return reverse_lazy("whishlist", kwargs={"username": user.username, "pk": wishlist.id})
+        owner = wishlist.fk_user
+        return reverse_lazy("whishlist", kwargs={"username": owner.username, "pk": wishlist.id})
