@@ -40,7 +40,7 @@ class ProfileView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         profiles_user = context["object"]
 
-        context["wishlists"] = Wishlist.objects.filter(user_id=profiles_user.id)
+        context["wishlists"] = Wishlist.objects.filter(fk_user=profiles_user.id)
 
         return context
 
@@ -53,7 +53,7 @@ class WhishlistView(generic.ListView):
         context["wishlists_owner"] = context["object_list"][0]
         context["wishlist"] = context["object_list"][1]
 
-        context["gifts"] = Gift.objects.filter(wishlist_id=context["wishlist"].id)
+        context["gifts"] = Gift.objects.filter(fk_wishlist=context["wishlist"].id)
 
         context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
 
@@ -64,15 +64,15 @@ class WhishlistView(generic.ListView):
         pk = self.kwargs["pk"]
 
         whishlists_user = User.objects.get(username=username)
-        wishlist = Wishlist.objects.get(id=pk, user_id=whishlists_user.id)
+        wishlist = Wishlist.objects.get(id=pk, fk_user=whishlists_user.id)
         return whishlists_user, wishlist
 
 class GiftDeleteView(generic.DeleteView):
     model = Gift
 
     def delete(self, *args, **kwargs):
-        gift_wishlist = Gift.objects.get(id=self.kwargs.get("pk")).wishlist_id
-        gift_owner = gift_wishlist.user_id
+        gift_wishlist = Gift.objects.get(id=self.kwargs.get("pk")).fk_wishlist
+        gift_owner = gift_wishlist.fk_user
 
         if gift_owner == self.request.user: # verify user is the wishlisht's owner
             return super(GiftDeleteView, self).delete(*args, **kwargs)
@@ -81,8 +81,8 @@ class GiftDeleteView(generic.DeleteView):
 
     def get_success_url(self):
         removed_gift = self.object
-        wishlist = removed_gift.wishlist_id
-        user = wishlist.user_id
+        wishlist = removed_gift.fk_wishlist
+        user = wishlist.fk_user
         return reverse_lazy("whishlist", kwargs={"username" : user.username, "pk" : wishlist.id})
 
 class GiftCreateView(generic.CreateView):
@@ -91,9 +91,9 @@ class GiftCreateView(generic.CreateView):
 
     def form_valid(self, form):
         gift_wishlist = Wishlist.objects.get(id=self.kwargs.get("pk"))
-        gift_owner = gift_wishlist.user_id
+        gift_owner = gift_wishlist.fk_user
 
-        form.instance.wishlist_id = gift_wishlist # add foreign key
+        form.instance.fk_wishlist = gift_wishlist # add foreign key
 
         if gift_owner == self.request.user: # verify user is the wishlisht's owner
             return super(GiftCreateView, self).form_valid(form)
@@ -102,6 +102,6 @@ class GiftCreateView(generic.CreateView):
 
     def get_success_url(self):
         new_gift = self.object
-        wishlist = new_gift.wishlist_id
-        user = wishlist.user_id
+        wishlist = new_gift.fk_wishlist
+        user = wishlist.fk_user
         return reverse_lazy("whishlist", kwargs={"username": user.username, "pk": wishlist.id})

@@ -7,7 +7,7 @@ class Wishlist(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
 
-    user_id = models.ForeignKey(User, on_delete = models.CASCADE)
+    fk_user = models.ForeignKey(User, on_delete = models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -21,7 +21,7 @@ class Gift(models.Model):
     link = models.CharField(max_length=256, blank=True, null=True)
     validated = models.BooleanField(default=False)
 
-    wishlist_id = models.ForeignKey('Wishlist', on_delete = models.CASCADE)
+    fk_wishlist = models.ForeignKey('Wishlist', on_delete = models.CASCADE)
 
     def __str__(self):
         return self.name
