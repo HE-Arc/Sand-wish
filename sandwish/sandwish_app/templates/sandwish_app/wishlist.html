@@ -8,6 +8,7 @@
 
     {% if is_wishlists_owner %}
         <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">Ajouter un nouveau cadeau</a>
+        <a href="{% url 'whishlist-delete' wishlist.id %}" class="btn btn-danger">Supprimer la wishlist</a>
     {% endif %}
 
     {% for gift in gifts %}
