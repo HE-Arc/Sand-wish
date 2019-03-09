@@ -6,9 +6,11 @@
     <p>{{ wishlists_owner.username }}<p>
     <p>{{ wishlist.description }}</p>
 
+    <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-info">Get back to {{ wishlists_owner.username }}'s profile</a>
+
     {% if is_wishlists_owner %}
         <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">Ajouter un nouveau cadeau</a>
-        <a href="{% url 'whishlist-delete' wishlist.id %}" class="btn btn-danger">Supprimer la wishlist</a>
+        <a href="{% url 'wishlist-delete' wishlist.id %}" class="btn btn-danger">Supprimer la wishlist</a>
     {% endif %}
 
     {% for gift in gifts %}
