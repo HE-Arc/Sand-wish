@@ -1,0 +1,13 @@
+{% extends "sandwish_app/base_generic.html" %}
+
+{% block content %}
+
+    <h1>Are you sure you want to validate  "{{ object }}"?</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to validate  "{{ object }}"?</p>
+        <input class="btn btn-success" type="submit" value="Confirm" />
+        <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist.id %}" class="btn btn-danger">Cancel</a>
+    </form>
+
+{% endblock %}

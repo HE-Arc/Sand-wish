@@ -38,7 +38,7 @@
                     <a href="{{ gift.link }}" target="_blank" class="btn btn-info">Lien</a>
                 {% endif %}
                 {% if not gift.validated %}
-                    <a href="" class="btn btn-primary">Valider</a>
+                    <a href="{% url 'gift-validate' gift.id %}" class="btn btn-primary">Valider</a>
                 {% endif %}
                 <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger">Supprimer</a>
             </div>
