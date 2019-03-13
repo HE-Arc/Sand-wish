@@ -13,5 +13,5 @@ urlpatterns = [
     path("wishlist/delete/<pk>", views.WishlistDeleteView.as_view(), name="wishlist-delete"),
     path("gift/delete/<pk>", views.GiftDeleteView.as_view(), name="gift-delete"),
     path("<slug:username>/wishlist/<pk>/create", views.GiftCreateView.as_view(), name="gift-create"),
-
+    path("contribution/create/", views.create_contribution, name="create-contribution"),
 ]
