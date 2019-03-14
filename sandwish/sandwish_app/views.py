@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from .forms import WishlistCreationForm#, ContributionForm
 import json as json
-
 from django.contrib.auth import login, authenticate
 from .models import User, Wishlist, Gift, Contribution
 from sandwish_app.forms import SignUpForm
@@ -40,12 +39,25 @@ def create_contribution(request):
 
         gift = Gift.objects.get(id=giftId)
 
-        contribution = Contribution(value=value, fk_gift=gift, fk_user=request.user)
-        contribution.save()
-
         response_data = {}
-        response_data['result'] = 'Create post successful!'
-        response_data['value'] = contribution.value
+
+        # TODO : check si existe déja et update ou créer en fonction :
+        try:
+            contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id).update(value=value)
+            response_data['value'] = contribution.value
+            response_data['result'] = 'updated'
+        except Entry.DoesNotExist as e:
+            contribution = Contribution(value=value, fk_gift=gift, fk_user=request.user)
+            contribution.save()
+            response_data['value'] = contribution.value
+            response_data['result'] = 'created'
+        except Exception as e:
+            response_data['result'] = 'failed'
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+
 
         return HttpResponse(
             json.dumps(response_data),
@@ -53,10 +65,6 @@ def create_contribution(request):
         )
     else:
         return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
-    return HttpResponse(
             json.dumps({"nothing to see": "this isn't happening"}),
             content_type="application/json"
         )
