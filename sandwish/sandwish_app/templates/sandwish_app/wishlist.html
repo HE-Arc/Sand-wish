@@ -80,7 +80,7 @@
             // handle a successful response
             success : function(json) {
                 // $(fieldName).val(''); // remove the value from the input
-                // console.log(json); // log the returned json to the console
+                console.log(json); // log the returned json to the console
                 console.log("success"); // another sanity check
             },
 
@@ -88,9 +88,9 @@
             error : function(xhr,errmsg,err) {
                 // TODO : if fail we put the old value back
                 console.log("fail");
-                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
             }
         });
     };

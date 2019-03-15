@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic, View
 from django.urls import reverse_lazy
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from .forms import WishlistCreationForm#, ContributionForm
 import json as json
@@ -33,7 +33,7 @@ def login_redirect(request):
 
 def create_contribution(request):
     if request.method == 'POST':
-        print("------------------YEAAAAAAAH-------------------")
+        print("------------------------------in create contribution---------------------------------")
         value = request.POST.get('value')
         giftId = request.POST.get('giftId')
 
@@ -41,23 +41,36 @@ def create_contribution(request):
 
         response_data = {}
 
-        # TODO : check si existe déja et update ou créer en fonction :
-        try:
-            contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id).update(value=value)
-            response_data['value'] = contribution.value
-            response_data['result'] = 'updated'
-        except Entry.DoesNotExist as e:
-            contribution = Contribution(value=value, fk_gift=gift, fk_user=request.user)
-            contribution.save()
-            response_data['value'] = contribution.value
-            response_data['result'] = 'created'
-        except Exception as e:
-            response_data['result'] = 'failed'
+        # check that the value is correct
+        currentContributionValue = 0
+        for contribution in Contribution.objects.filter(fk_gift=gift.id).exclude(fk_user=request.user.id):
+            currentContributionValue += contribution.value
+        if int(value) < 1 or int(value) > (gift.price - currentContributionValue):
+            response_data['result'] = 'bad_value'
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
             )
 
+
+        try:
+            contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
+            contribution.value = value
+            contribution.save()
+            response_data['value'] = contribution.value
+            response_data['result'] = 'updated'
+        except ObjectDoesNotExist as e:
+            contribution = Contribution(value=value, fk_gift=gift, fk_user=request.user)
+            contribution.save()
+            response_data['value'] = contribution.value
+            response_data['result'] = 'created'
+        except Exception as e:
+            print(e)
+            response_data['result'] = 'failed'
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
 
         return HttpResponse(
             json.dumps(response_data),
@@ -65,7 +78,7 @@ def create_contribution(request):
         )
     else:
         return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
+            json.dumps({"result": "not_post"}),
             content_type="application/json"
         )
 
