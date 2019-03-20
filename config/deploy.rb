@@ -1,8 +1,9 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.11.0"
 
-set :application, "my_app_name"
-set :repo_url, "git@example.com:me/my_repo.git"
+set :application, "sand-wish"
+# set :repo_url, "git@example.com:me/my_repo.git" # for ssh
+set :repo_url, "https://github.com/HE-Arc/Sand-wish.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -37,3 +38,33 @@ set :repo_url, "git@example.com:me/my_repo.git"
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+after 'deploy:updating', 'python:create_venv'
+after 'deploy:publishing', 'uwsgi:restart'
+
+
+namespace :uwsgi do
+    desc 'Restart application'
+    task :restart do
+        on roles(:web) do |h|
+	    execute :sudo, 'sv reload uwsgi'
+	end
+    end
+end
+
+
+namespace :python do
+
+    def venv_path
+        File.join(shared_path, 'env')
+    end
+
+    desc 'Create venv'
+    task :create_venv do
+        on roles([:app, :web]) do |h|
+	    execute "python3.6 -m venv #{venv_path}"
+            execute "source #{venv_path}/bin/activate"
+	    execute "#{venv_path}/bin/pip install -r /var/www/sand-wish/current/requirements.txt"
+        end
+    end
+end
