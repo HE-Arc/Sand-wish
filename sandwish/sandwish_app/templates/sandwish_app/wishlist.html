@@ -1,25 +1,48 @@
 {% extends "sandwish_app/base_generic.html" %}
+{% load static %}
 
 {% block content %}
 
-    <h1>{{ wishlist.title }}</h1>
-    <p>{{ wishlists_owner.username }}<p>
-    <p>{{ wishlist.description }}</p>
 
-    <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-info">Get back to {{ wishlists_owner.username }}'s profile</a>
+    <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm">Go back to {{ wishlists_owner.username }}'s profile</a>
+
+
+    <div class="card w-100">
+        <div class="card-body">
+            <h1 class="card-title">{{ wishlist.title }}</h1>
+            <p class="card-text">{{ wishlist.description }}</p>
+            <a href="#" class="btn btn-primary">Button</a>
+        </div>
+
+            </div>
 
     {% if is_wishlists_owner %}
-        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">Ajouter un nouveau cadeau</a>
-        <a href="{% url 'wishlist-delete' wishlist.id %}" class="btn btn-danger">Supprimer la wishlist</a>
+    <div class="row px-3">
+        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="col-10 p-0">
+            <div class="big-btn-add rounded border-success">
+                +
+            </div>
+        </a>
+
+        <a href="{% url 'wishlist-delete' wishlist.id %}" class="col-2 p-0">
+            <div class="big-btn-add rounded border-danger" >
+                -
+            </div>
+        </a>
+    </div>
     {% endif %}
+
+
 
     {% for gift in gifts %}
         {% if gift.validated %}
-        <div class="gift-item border my-2 alert-success">
+        <div class="gift-item border rounded shadow-sm my-2 alert-success">
         {% else %}
-        <div class="gift-item border my-2 ">
+        <div class="gift-item border rounded shadow-sm my-2">
         {% endif %}
-            <img class="gift-img" src="{{ gift.image }}" />
+            <div class="gift-img rounded ">
+                <img class="" src="{{ gift.image }}" />
+            </div>
             <div class="gift-infos">
                 <a href="" >
                     <h4>
@@ -35,15 +58,18 @@
         {% if is_wishlists_owner %}
             <div class="gift-actions">
                 {% if gift.link != Null %}
-                    <a href="{{ gift.link }}" target="_blank" class="btn btn-info">Lien</a>
+                    <a href="{{ gift.link }}" target="_blank" class="btn btn-info"><img src="{% static 'icons/buy-icon.png' %}" /></a>
                 {% endif %}
                 {% if not gift.validated %}
-                    <a href="" class="btn btn-primary">Valider</a>
+                    <a href="" class="btn btn-primary"><img src="{% static 'icons/validate-icon.png' %}" /></a>
                 {% endif %}
-                <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger">Supprimer</a>
+                <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger"><img src="{% static 'icons/delete-icon.png' %}" /></a>
             </div>
         {% endif %}
         </div>
     {% endfor %}
+
+
+
 
 {% endblock %}
