@@ -37,6 +37,7 @@ def create_contribution(request):
         value = request.POST.get('value')
         giftId = request.POST.get('giftId')
 
+        print(giftId)
         gift = Gift.objects.get(id=giftId)
 
         response_data = {}
@@ -45,8 +46,8 @@ def create_contribution(request):
         currentContributionValue = 0
         for contribution in Contribution.objects.filter(fk_gift=gift.id).exclude(fk_user=request.user.id):
             currentContributionValue += contribution.value
-        if int(value) < 1 or int(value) > (gift.price - currentContributionValue):
-            response_data['result'] = 'bad_value'
+        if float(value) < 1 or float(value) > (gift.price - currentContributionValue):
+            response_data['result'] = 'fail'
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
@@ -57,19 +58,21 @@ def create_contribution(request):
             contribution.value = value
             contribution.save()
             response_data['value'] = contribution.value
-            response_data['result'] = 'updated'
+            response_data['result'] = 'success'
         except ObjectDoesNotExist as e:
             contribution = Contribution(value=value, fk_gift=gift, fk_user=request.user)
             contribution.save()
             response_data['value'] = contribution.value
-            response_data['result'] = 'created'
+            response_data['result'] = 'success'
         except Exception as e:
             print(e)
-            response_data['result'] = 'failed'
+            response_data['result'] = 'fail'
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
             )
+
+        response_data["new_total_contribution"] = str(float(currentContributionValue) + float(value))
 
         return HttpResponse(
             json.dumps(response_data),
@@ -128,15 +131,24 @@ class WishlistView(generic.ListView):
         context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
 
         # faut faire une liste des cadeau associé à leur contribution et à la courante
-        gifts = {}
+        gifts = []
         for gift in Gift.objects.filter(fk_wishlist=context["wishlist"].id):
-            gift = {}
-            gift.append(gift)
+            full_gift = []
+            full_gift.append(gift)
 
             total_contribution = 0
+            user_contribution = 0
             for contribution in Contribution.objects.filter(fk_gift=gift.id):
-                
-
+                total_contribution += contribution.value
+                if contribution.fk_user.id == self.request.user.id:
+                    user_contribution = contribution.value
+            full_gift.append(total_contribution)
+            full_gift.append(user_contribution)
+            full_gift.append(gift.price - total_contribution + user_contribution)
+            gifts.append(full_gift)
+        context["gifts"] = gifts
+        print("---------------------------------------------------------------------------------------------------------------")
+        print(gifts)
         return context
 
     def get_queryset(self):
