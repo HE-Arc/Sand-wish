@@ -52,7 +52,6 @@ def create_contribution(request):
                 content_type="application/json"
             )
 
-
         try:
             contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
             contribution.value = value
@@ -125,10 +124,19 @@ class WishlistView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context["wishlists_owner"] = context["object_list"][0]
         context["wishlist"] = context["object_list"][1]
-        context["gifts"] = Gift.objects.filter(fk_wishlist=context["wishlist"].id)
+        #context["gifts"] = Gift.objects.filter(fk_wishlist=context["wishlist"].id)
         context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
 
-        # context["contribution_form"] = ContributionForm()
+        # faut faire une liste des cadeau associé à leur contribution et à la courante
+        gifts = {}
+        for gift in Gift.objects.filter(fk_wishlist=context["wishlist"].id):
+            gift = {}
+            gift.append(gift)
+
+            total_contribution = 0
+            for contribution in Contribution.objects.filter(fk_gift=gift.id):
+                
+
         return context
 
     def get_queryset(self):
