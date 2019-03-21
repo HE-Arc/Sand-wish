@@ -1,6 +1,7 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
+    {% include "sandwish_app/header.html" %}
 
     <h1>{{ wishlist.title }}</h1>
     <p>{{ wishlists_owner.username }}<p>

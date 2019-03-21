@@ -1,0 +1,13 @@
+
+
+{% load static %}
+<!-- <script type="text/javascript" src="{% static 'scripts/bootstrap3-typeahead.min.js' %}"></script> -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'scripts/searchbar.js' %}"></script>
+
+<form class="searchbar" id="search-form" method="post" action="{% url 'search' %}" onsubmit="search('{{ csrf_token }}')">
+    {% csrf_token %}
+    <input type="search" id="search-field" value="{{ search }}" pattern="^[\w-]+$" placeholder="Search username...">
+    <input type="submit" id="search-btn" value="Search" onclick="searchBtnClick('{{ csrf_token }}')">
+</form>

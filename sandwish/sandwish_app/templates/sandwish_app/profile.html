@@ -1,6 +1,8 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
+    {% include "sandwish_app/header.html" %}
+    
     <div>Profile</div>
     {% if user.is_authenticated %}
         User: {{ user.get_username }}

@@ -3,14 +3,14 @@
 {% block title %}Delete gift{% endblock %}
 
 {% block content %}
+    {% include "sandwish_app/header.html" %}
+
     <div class="container">
-
-      <form action="" method="post">
-          {% csrf_token %}
-          <p>Are you sure you want to delete "{{ object }}"?</p>
-          <input type="submit" value="Confirm" />
-          <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist.id %}" class="btn btn-danger">Cancel</a>
-      </form>
-
+        <form action="" method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" value="Confirm" />
+            <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist.id %}" class="btn btn-danger">Cancel</a>
+        </form>
     </div>
 {% endblock %}
