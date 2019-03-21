@@ -1,37 +1,37 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-    <div>Profile</div>
+    <h1>{{ user.get_username }}</h1>
+
+
     {% if user.is_authenticated %}
-        User: {{ user.get_username }}
-
-        <table>
-            {% for w in wishlists %}
-                <tr>
-                    <td>
-                        <a href="{% url 'wishlist' username=user.username pk=w.id %}">
-                            {{ w.title }}
-                        </a>
-                    </td>
-                    <td>{{ w.description }}</td>
-                    <td>{{ w.id }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-
         {% if is_profiles_owner %}
-            <a onclick="toggleFormDisplay()" class="btn btn-success btn-sm">Create a wishlist</a>
-            <form id="wishlist_creation_form" action="" method="post" style="display: none;">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Ajouter" />
-            </form>
+            <div class="row p-2">
+                <button onclick="toggleFormDisplay()" class="btn btn-success" >Create a wishlist</button>
+                <form id="wishlist_creation_form" action="" method="post" style="display: none;">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" class="btn btn-primary" value="Ajouter" />
+                </form>
+            </div>
         {% endif %}
-
-        <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
     {% endif %}
+
+    <div class="row p-1">
+        {% for w in wishlists %}
+        <div class="col-md-6 p-1">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">{{ w.title }}</h3>
+                    <p class="card-text">{{ w.description }}</p>
+                    <a class="btn btn-primary" href="{% url 'wishlist' username=user.username pk=w.id %}">
+                        Show the wishlist
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
     <script>
         let toggleFormDisplay = () => {
