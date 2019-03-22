@@ -1,13 +1,10 @@
 {% extends "sandwish_app/base_generic.html" %}
 
-<!-- js include -->
-{% load static %}
-<!-- {% load static from staticfiles %} -->
-<script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
-<!-- <script type="text/javascript" src="sandwish_app/static/scripts/contribution.js"> -->
-
-</script>
 {% block content %}
+
+{% load static %}
+<script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
+
 <h1>{{ wishlist.title }}</h1>
 <p>{{ wishlists_owner.username }}<p>
 <p>{{ wishlist.description }}</p>
