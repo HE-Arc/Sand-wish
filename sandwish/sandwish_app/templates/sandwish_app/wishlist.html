@@ -2,9 +2,11 @@
 
 <!-- js include -->
 {% load static %}
-<!-- <script type = "text/javascript" src = "scripts/contribution.js" ></script> -->
-<!-- <script type = "text/javascript" src = "{% static 'scripts/contribution.js' %}" ></script> -->
+<!-- {% load static from staticfiles %} -->
+<script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
+<!-- <script type="text/javascript" src="sandwish_app/static/scripts/contribution.js"> -->
 
+</script>
 {% block content %}
 <h1>{{ wishlist.title }}</h1>
 <p>{{ wishlists_owner.username }}<p>
@@ -41,7 +43,7 @@
             </div>
         </div>
         <div class="gift-contribution">
-            <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" onsubmit="contributionSubmit('{{ gift.0.id}}', '{{ gift.2 }}')">
+            <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
                 {% csrf_token %}
                 <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
                 <input type="submit" value="Post" class="">
@@ -62,25 +64,27 @@
     </div>
 {% endfor %}
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     // Submit post on submit
-    function contributionSubmit(giftId, last_value)
+    function contributionSubmit(giftId, last_value, csrf_token)
     {
-        event.preventDefault();
-        // alert("form submitted, gift id : " + giftId);
-        create_contribution(giftId, last_value);
+        if (event){
+            event.preventDefault();
+        }
+        create_contribution(giftId, last_value, csrf_token);
     }
 
     // AJAX for posting
-    function create_contribution(giftId, last_value) {
+    function create_contribution(giftId, last_value, csrf_token) {
         // console.log("create post is working!"); // sanity check
         valueFieldName = '#contribution' + giftId;
         alert("creating contrib for gift : " + giftId + ", with contrib : " + $(valueFieldName).val())
+        console.log(giftId);
 
         $.ajax({
-            url : "{% url 'create-contribution' %}", // the endpoint
+            url : "/contribution/create/", // the endpoint
             type : "POST", // http method
-            data : {'value' : $(valueFieldName).val(), 'giftId' : giftId, 'csrfmiddlewaretoken' : '{{ csrf_token }}'}, // data sent with the post request
+            data : {'value' : $(valueFieldName).val(), 'giftId' : giftId, 'csrfmiddlewaretoken' : csrf_token}, // data sent with the post request
 
             // handle a successful response
             success : function(json) {
@@ -97,14 +101,10 @@
 
             // handle a non-successful response
             error : function(xhr,errmsg,err) {
-                // TODO : if fail we put the old value back
                 console.log("fail");
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                 console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
             }
         });
     };
-</script>
-
+</script> -->
 {% endblock %}
