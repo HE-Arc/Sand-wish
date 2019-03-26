@@ -1,6 +1,7 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
+    {% load static %}
     {% include "sandwish_app/header.html" %}
 
     <h1>{{ wishlist.title }}</h1>
@@ -20,7 +21,12 @@
         {% else %}
         <div class="gift-item border my-2 ">
         {% endif %}
-            <img class="gift-img" src="{{ gift.image }}" />
+            {% if gift.image != None %}
+                <img class="gift-img" src="{{ gift.image }}" />
+            {% else %}
+                <img class="gift-img" src="{% static 'images/default_gift.png' %}" />
+            {% endif %}
+
             <div class="gift-infos">
                 <a href="" >
                     <h4>
@@ -33,17 +39,17 @@
             </div>
 
 
-        {% if is_wishlists_owner %}
-            <div class="gift-actions">
-                {% if gift.link != Null %}
-                    <a href="{{ gift.link }}" target="_blank" class="btn btn-info">Lien</a>
-                {% endif %}
-                {% if not gift.validated %}
-                    <a href="" class="btn btn-primary">Valider</a>
-                {% endif %}
-                <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger">Supprimer</a>
-            </div>
-        {% endif %}
+            {% if is_wishlists_owner %}
+                <div class="gift-actions">
+                    {% if gift.link != Null %}
+                        <a href="{{ gift.link }}" target="_blank" class="btn btn-info">Lien</a>
+                    {% endif %}
+                    {% if not gift.validated %}
+                        <a href="" class="btn btn-primary">Valider</a>
+                    {% endif %}
+                    <a href="{% url 'gift-delete' gift.id %}" class="btn btn-danger">Supprimer</a>
+                </div>
+            {% endif %}
         </div>
     {% endfor %}
 

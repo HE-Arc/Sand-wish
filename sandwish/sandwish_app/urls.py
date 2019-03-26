@@ -12,9 +12,9 @@ urlpatterns = [
     path("search/<search>", views.index, name="index_search"),
     path("admin/", admin.site.urls),
     path("<slug:slug>/", views.ProfileView.as_view(), name="profile"),
-    path("<slug:username>/wishlist/<pk>", views.WishlistView.as_view(), name="wishlist"),
-    path("wishlist/delete/<pk>", views.WishlistDeleteView.as_view(), name="wishlist-delete"),
-    path("gift/delete/<pk>", views.GiftDeleteView.as_view(), name="gift-delete"),
-    path("<slug:username>/wishlist/<pk>/create", views.GiftCreateView.as_view(), name="gift-create"),
+    path("<slug:username>/wishlist/<int:pk>", views.WishlistView.as_view(), name="wishlist"),
+    path("wishlist/delete/<int:pk>", views.WishlistDeleteView.as_view(), name="wishlist-delete"),
+    path("gift/delete/<int:pk>", views.GiftDeleteView.as_view(), name="gift-delete"),
+    path("<slug:username>/wishlist/<int:pk>/create", views.GiftCreateView.as_view(), name="gift-create"),
 
 ]
