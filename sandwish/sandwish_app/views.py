@@ -49,7 +49,7 @@ def create_contribution(request):
             response_data['result'] = 'fail'
             try:
                 contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
-                response_data['old_value'] = contribution.value
+                response_data['old_value'] = float(contribution.value)
             except Exception as e:
                 response_data['old_value'] = 0
             return HttpResponse(
