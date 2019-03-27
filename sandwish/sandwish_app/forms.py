@@ -14,8 +14,12 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
 
 class WishlistCreationForm(forms.ModelForm):
-    title = forms.CharField(label="Wishlist's name", max_length=128)
-    description = forms.CharField(label="Wishlist's description")
+    title = forms.CharField(label="", max_length=128, widget=forms.TextInput(attrs={
+                            'class': "form-control",
+                            'placeholder' : "Wishlist's name"}))
+    description = forms.CharField(label="", widget=forms.Textarea (attrs={
+                            'class': "form-control",
+                            'placeholder' : "Wishlist's description"}))
 
     class Meta:
         model = Wishlist
