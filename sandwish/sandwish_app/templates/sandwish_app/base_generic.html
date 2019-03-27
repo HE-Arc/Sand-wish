@@ -4,14 +4,17 @@
         <meta charset="utf-8">
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'styles/general.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block title %}<title>SandWish</title>{% endblock %}
         {% load bootstrap4 %}
         {% bootstrap_css %}
         {% bootstrap_javascript jquery='full' %}
+        {% load widget_tweaks %}
     </head>
     <body>
-        <div class="container">
+        {% include "sandwish_app/header.html" %}
+        <section class="container">
             {% block content %}{% endblock %}
-        </div>
+        </section>
     </body>
 </html>

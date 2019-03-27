@@ -31,8 +31,8 @@ class Gift(models.Model):
 class Contribution(models.Model):
     value = models.DecimalField(max_digits=8, decimal_places=2)
 
-    gift = models.ForeignKey('Gift', on_delete = models.CASCADE)
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    fk_gift = models.ForeignKey('Gift', on_delete = models.CASCADE)
+    fk_user = models.ForeignKey(User, on_delete = models.CASCADE)
 
     def __str__(self):
-        return self.value
+        return str(self.value)

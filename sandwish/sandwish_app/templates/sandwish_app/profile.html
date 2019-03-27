@@ -1,42 +1,58 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-    <div>Profile</div>
+
+    <h1>{{ profiles_owner.get_username }}'s profile</h1>
     {% if user.is_authenticated %}
-        User: {{ user.get_username }}
-
-        <table>
-            {% for w in wishlists %}
-                <tr>
-                    <td>
-                        <a href="{% url 'wishlist' username=user.username pk=w.id %}">
-                            {{ w.title }}
-                        </a>
-                    </td>
-                    <td>{{ w.description }}</td>
-                    <td>{{ w.id }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-
         {% if is_profiles_owner %}
-            <a onclick="toggleFormDisplay()" class="btn btn-success btn-sm">Create a wishlist</a>
-            <form id="wishlist_creation_form" action="" method="post" style="display: none;">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Ajouter" />
-            </form>
+            <button id="show_form_button" onclick="showFormDisplay()" class="btn btn-primary" >Create a wishlist</button>
+            <div id="wishlist_creation_form" class="row px-3 justify-content-center" style="display: none;">
+                <div class="border rounded p-3 col-md-6 ">
+                    <form  action="" method="post" >
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" class="btn btn-success" value="Create the wishlist" />
+                        <button class="btn btn-danger" onclick="hideFormDisplay()" value="Cancel" />
+                    </form>
+                </div>
+            </div>
         {% endif %}
-
-        <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
     {% endif %}
 
+    <div class="row px-3">
+        {% for w in wishlists %}
+            <div class="col-md-6 p-0">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ w.title }}</h3>
+                        <p class="card-text">{{ w.description }}</p>
+                        <a class="btn btn-primary" href="{% url 'wishlist' username=user.username pk=w.id %}">
+                            Show the wishlist
+                        </a>
+                        {% if is_profiles_owner %}
+                            <a href="{% url 'wishlist-delete' w.id %}" class="btn btn-danger">x</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
     <script>
-        let toggleFormDisplay = () => {
+        let showFormDisplay = () => {
             let wishlist_creation_form = document.getElementById("wishlist_creation_form");
-            wishlist_creation_form.style.display = wishlist_creation_form.style.display == "none" ? "block" : "none";
+            let show_form_button = document.getElementById("show_form_button");
+
+            wishlist_creation_form.style.display = "block";
+            show_form_button.style.display = "none";
+        };
+
+        let hideFormDisplay = () => {
+            let wishlist_creation_form = document.getElementById("wishlist_creation_form");
+            let show_form_button = document.getElementById("show_form_button");
+
+            wishlist_creation_form.style.display ="none";
+            show_form_button.style.display ="block";
         };
     </script>
 {% endblock %}

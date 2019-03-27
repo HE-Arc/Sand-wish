@@ -1,18 +1,22 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views import generic, View
 from django.urls import reverse_lazy
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from .forms import WishlistCreationForm
+import json as json
+from django.core import serializers
 
 # for signup
 from django.contrib.auth import login, authenticate
-from .models import User, Wishlist, Gift
+from .models import User, Wishlist, Gift, Contribution
 from sandwish_app.forms import SignUpForm
 
-def index(request):
+def index(request, search=None):
+    search = "" if search == None else search
     context = {}
+    context["search"] = search
     return render(request, "sandwish_app/index.html", context)
 
 def signup(request):
@@ -32,7 +36,82 @@ def signup(request):
 def login_redirect(request):
     return redirect("profile", request.user.username)
 
+
 # - USERS VIEWS ----------------------------------------------------------------
+
+def create_contribution(request):
+    if request.method == 'POST':
+        print("------------------------------in create contribution---------------------------------")
+        value = request.POST.get('value')
+        giftId = request.POST.get('giftId')
+        print("---", giftId)
+        gift = Gift.objects.get(id=giftId)
+
+        response_data = {}
+
+        # check that the value is correct
+        currentContributionValue = 0
+        for contribution in Contribution.objects.filter(fk_gift=gift.id).exclude(fk_user=request.user.id):
+            currentContributionValue += contribution.value
+        if float(value) < 1 or float(value) > (gift.price - currentContributionValue):
+            response_data['result'] = 'fail'
+            try:
+                contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
+                response_data['old_value'] = float(contribution.value)
+            except Exception as e:
+                response_data['old_value'] = 0
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+
+        try:
+            contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
+            contribution.value = value
+            contribution.save()
+            response_data['value'] = contribution.value
+            response_data['result'] = 'success'
+        except ObjectDoesNotExist as e:
+            contribution = Contribution(value=value, fk_gift=gift, fk_user=request.user)
+            contribution.save()
+            response_data['value'] = contribution.value
+            response_data['result'] = 'success'
+        except Exception as e:
+            print(e)
+            response_data['result'] = 'fail'
+            response_data['old_value'] = 0
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+
+        response_data["new_total_contribution"] = str(float(currentContributionValue) + float(value))
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"result": "not_post"}),
+            content_type="application/json"
+        )
+
+def search(request):
+    if request.method == "POST":
+        search = request.POST.get("search")
+        search = "" if search == None else search
+
+        response_data = {}
+        response_data["results"] = serializers.serialize("json", User.objects.filter(username__icontains=search))
+
+        return JsonResponse(response_data)
+
+def search_redirect(request):
+    search = request.POST.get("search")
+    search = "" if search == None else search
+    return JsonResponse({'success': True,
+                         'url': reverse_lazy("index_search", kwargs={"search": search})})
 
 class ProfileView(generic.DetailView):
     model = User
@@ -45,6 +124,7 @@ class ProfileView(generic.DetailView):
 
         context["profiles_owner"] = profiles_user
         context["is_profiles_owner"] = context["profiles_owner"] == self.request.user
+        context["user"] = self.request.user
         context["wishlists"] = Wishlist.objects.filter(fk_user=profiles_user.id)
 
         if "form" not in kwargs:
@@ -72,24 +152,35 @@ class ProfileView(generic.DetailView):
 
 # - WISHLISTS VIEWS ------------------------------------------------------------
 
-class WishlistView(generic.ListView):
+class WishlistView(generic.DetailView):
+    model = Wishlist
     template_name = "sandwish_app/wishlist.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["wishlists_owner"] = context["object_list"][0]
-        context["wishlist"] = context["object_list"][1]
-        context["gifts"] = Gift.objects.filter(fk_wishlist=context["wishlist"].id)
+        context["wishlists_owner"] = User.objects.get(username=self.kwargs["username"])
+        context["wishlist"] = self.object
+        #context["gifts"] = Gift.objects.filter(fk_wishlist=context["wishlist"].id)
         context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
+
+        # faut faire une liste des cadeau associé à leur contribution et à la courante
+        gifts = []
+        for gift in Gift.objects.filter(fk_wishlist=context["wishlist"].id):
+            full_gift = []
+            full_gift.append(gift)
+
+            total_contribution = 0
+            user_contribution = 0
+            for contribution in Contribution.objects.filter(fk_gift=gift.id):
+                total_contribution += contribution.value
+                if contribution.fk_user.id == self.request.user.id:
+                    user_contribution = contribution.value
+            full_gift.append(total_contribution)
+            full_gift.append(user_contribution)
+            full_gift.append(gift.price - total_contribution + user_contribution)
+            gifts.append(full_gift)
+        context["gifts"] = gifts
         return context
-
-    def get_queryset(self):
-        username = self.kwargs["username"]
-        pk = self.kwargs["pk"]
-
-        wishlists_user = User.objects.get(username=username)
-        wishlist = Wishlist.objects.get(id=pk, fk_user=wishlists_user.id)
-        return wishlists_user, wishlist
 
 class WishlistDeleteView(generic.DeleteView):
     model = Wishlist
