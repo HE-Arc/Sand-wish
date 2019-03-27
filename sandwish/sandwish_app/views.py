@@ -40,7 +40,7 @@ def search(request):
     if request.method == "POST":
         search = request.POST.get("search")
         search = "" if search == None else search
-        
+
         response_data = {}
         response_data["results"] = serializers.serialize("json", User.objects.filter(username__icontains=search))
 
@@ -63,6 +63,7 @@ class ProfileView(generic.DetailView):
 
         context["profiles_owner"] = profiles_user
         context["is_profiles_owner"] = context["profiles_owner"] == self.request.user
+        context["user"] = self.request.user
         context["wishlists"] = Wishlist.objects.filter(fk_user=profiles_user.id)
 
         if "form" not in kwargs:

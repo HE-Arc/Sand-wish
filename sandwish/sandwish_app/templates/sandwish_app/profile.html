@@ -2,8 +2,7 @@
 
 {% block content %}
 
-    <h1>{{ user.get_username }}'s profile</h1>
-
+    <h1>{{ profiles_owner.get_username }}'s profile</h1>
     {% if user.is_authenticated %}
         {% if is_profiles_owner %}
             <button id="show_form_button" onclick="showFormDisplay()" class="btn btn-primary" >Create a wishlist</button>
