@@ -3,14 +3,14 @@
 {% block title %}Delete wishlist{% endblock %}
 
 {% block content %}
-    <div class="container">
+    
 
+    <div class="container">
       <form action="" method="post">
           {% csrf_token %}
           <p>Are you sure you want to delete "{{ object }}"?</p>
           <input type="submit" value="Confirm" />
           <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist_to_remove.id %}" class="btn btn-danger">Cancel</a>
       </form>
-
     </div>
 {% endblock %}

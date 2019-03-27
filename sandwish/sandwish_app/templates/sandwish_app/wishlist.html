@@ -2,63 +2,77 @@
 
 {% block content %}
 
-{% load static %}
-<script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
+    {% load static %}
+    <script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
 
-<h1>{{ wishlist.title }}</h1>
-<p>{{ wishlists_owner.username }}<p>
-<p>{{ wishlist.description }}</p>
-
-<a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-info">Get back to {{ wishlists_owner.username }}'s profile</a>
-
-{% if is_wishlists_owner %}
-    <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">Ajouter un nouveau cadeau</a>
-    <a href="{% url 'wishlist-delete' wishlist.id %}" class="btn btn-danger">Supprimer la wishlist</a>
-{% endif %}
+    <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm">Go back to {{ wishlists_owner.username }}'s profile</a>
 
 
-<!-- gift.0 = actual gift, gift.1 = toatl contrib, gift.2 = user contrib and gift.3 = max possible contribution -->
-{% for gift in gifts %}
-    {% if gift.validated %}
-    <div class="gift-item border my-2 alert-success">
-    {% else %}
-    <div class="gift-item border my-2 ">
-    {% endif %}
-        <img class="gift-img" src="{{ gift.0.image }}" />
-        <div class="gift-infos">
-            <a href="" >
-                <h4>
-                    {{ gift.0.name }}
-                </h4>
-            </a>
-            <div class="">
-                {{ gift.0.price }}
-            </div>
-            <br>
-            <div id="full_contribution{{ gift.0.id }}">
-                {{ gift.1 }}
-            </div>
+    <div class="card w-100">
+        <div class="card-body">
+            <h1 class="card-title">{{ wishlist.title }}</h1>
+            <p class="card-text">{{ wishlist.description }}</p>
+            <a href="#" class="btn btn-primary">Button</a>
         </div>
-        <div class="gift-contribution">
-            <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
-                {% csrf_token %}
-                <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
-                <input type="submit" value="Post" class="">
-            </form>
-        </div>
+
+            </div>
 
     {% if is_wishlists_owner %}
-        <div class="gift-actions">
-            {% if gift.link != Null %}
-                <a href="{{ gift.0.link }}" target="_blank" class="btn btn-info">Lien</a>
-            {% endif %}
-            {% if not gift.validated %}
-                <a href="" class="btn btn-primary">Valider</a>
-            {% endif %}
-            <a href="{% url 'gift-delete' gift.0.id %}" class="btn btn-danger">Supprimer</a>
-        </div>
-    {% endif %}
-    </div>
-{% endfor %}
+    <div class="row px-3">
+        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="col-10 p-0">
+            <div class="big-btn-add rounded border-success">
+                +
+            </div>
+        </a>
 
+    </div>
+    {% endif %}
+
+    <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib and gift.3 = max possible contribution -->
+    {% for gift in gifts %}
+        {% if gift.0.validated %}
+        <div class="gift-item border rounded shadow-sm my-2 alert-success">
+        {% else %}
+        <div class="gift-item border rounded shadow-sm my-2">
+        {% endif %}
+            <div class="gift-img rounded ">
+                {% if gift.0.image != None %}
+                    <img class="gift-img" src="{{ gift.0.image }}" />
+                {% else %}
+                    <img class="gift-img" src="{% static 'images/default_gift.png' %}" />
+                {% endif %}
+            </div>
+            <div class="gift-infos">
+                <a href="" >
+                    <h4>
+                        {{ gift.0.name }}
+                    </h4>
+                </a>
+                <div class="">
+                    {{ gift.0.price }}
+                </div>
+                <div id="full_contribution{{ gift.0.id }}">
+                    {{ gift.1 }}
+                </div>
+                <div class="gift-contribution">
+                    <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
+                        {% csrf_token %}
+                        <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
+                        <input type="submit" value="Post" class="">
+                    </form>
+                </div>
+            </div>
+        {% if is_wishlists_owner %}
+            <div class="gift-actions">
+                {% if gift.0.link != Null %}
+                    <a href="{{ gift.0.link }}" target="_blank" class="btn btn-info"><img src="{% static 'icons/buy-icon.png' %}" /></a>
+                {% endif %}
+                {% if not gift.0.validated %}
+                    <a href="" class="btn btn-primary"><img src="{% static 'icons/validate-icon.png' %}" /></a>
+                {% endif %}
+                <a href="{% url 'gift-delete' gift.0.id %}" class="btn btn-danger"><img src="{% static 'icons/delete-icon.png' %}" /></a>
+            </div>
+        {% endif %}
+        </div>
+    {% endfor %}
 {% endblock %}

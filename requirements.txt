@@ -1,5 +1,6 @@
 Django==2.1.7
 django-bootstrap4==0.0.7
+django-widget-tweaks==1.4.3
 pytz==2018.9
 Django==2.1.7
 django-bootstrap4==0.0.7

@@ -1,17 +1,22 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views import generic, View
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
-from .forms import WishlistCreationForm#, ContributionForm
+from .forms import WishlistCreationForm
 import json as json
+from django.core import serializers
+
+# for signup
 from django.contrib.auth import login, authenticate
 from .models import User, Wishlist, Gift, Contribution
 from sandwish_app.forms import SignUpForm
 
-def index(request):
+def index(request, search=None):
+    search = "" if search == None else search
     context = {}
+    context["search"] = search
     return render(request, "sandwish_app/index.html", context)
 
 def signup(request):
@@ -89,6 +94,22 @@ def create_contribution(request):
             content_type="application/json"
         )
 
+def search(request):
+    if request.method == "POST":
+        search = request.POST.get("search")
+        search = "" if search == None else search
+
+        response_data = {}
+        response_data["results"] = serializers.serialize("json", User.objects.filter(username__icontains=search))
+
+        return JsonResponse(response_data)
+
+def search_redirect(request):
+    search = request.POST.get("search")
+    search = "" if search == None else search
+    return JsonResponse({'success': True,
+                         'url': reverse_lazy("index_search", kwargs={"search": search})})
+
 class ProfileView(generic.DetailView):
     model = User
     slug_field = "username"
@@ -100,6 +121,7 @@ class ProfileView(generic.DetailView):
 
         context["profiles_owner"] = profiles_user
         context["is_profiles_owner"] = context["profiles_owner"] == self.request.user
+        context["user"] = self.request.user
         context["wishlists"] = Wishlist.objects.filter(fk_user=profiles_user.id)
 
         if "form" not in kwargs:
@@ -125,13 +147,14 @@ class ProfileView(generic.DetailView):
             context.update({"form": form})
             return self.render_to_response(context)
 
-class WishlistView(generic.ListView):
+class WishlistView(generic.DetailView):
+    model = Wishlist
     template_name = "sandwish_app/wishlist.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["wishlists_owner"] = context["object_list"][0]
-        context["wishlist"] = context["object_list"][1]
+        context["wishlists_owner"] = User.objects.get(username=self.kwargs["username"])
+        context["wishlist"] = self.object
         #context["gifts"] = Gift.objects.filter(fk_wishlist=context["wishlist"].id)
         context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
 
@@ -152,17 +175,7 @@ class WishlistView(generic.ListView):
             full_gift.append(gift.price - total_contribution + user_contribution)
             gifts.append(full_gift)
         context["gifts"] = gifts
-        print("---------------------------------------------------------------------------------------------------------------")
-        print(gifts)
         return context
-
-    def get_queryset(self):
-        username = self.kwargs["username"]
-        pk = self.kwargs["pk"]
-
-        wishlists_user = User.objects.get(username=username)
-        wishlist = Wishlist.objects.get(id=pk, fk_user=wishlists_user.id)
-        return wishlists_user, wishlist
 
 class WishlistDeleteView(generic.DeleteView):
     model = Wishlist
