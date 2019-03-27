@@ -37,7 +37,6 @@ def create_contribution(request):
         value = request.POST.get('value')
         giftId = request.POST.get('giftId')
 
-        print(giftId)
         gift = Gift.objects.get(id=giftId)
 
         response_data = {}
@@ -48,6 +47,11 @@ def create_contribution(request):
             currentContributionValue += contribution.value
         if float(value) < 1 or float(value) > (gift.price - currentContributionValue):
             response_data['result'] = 'fail'
+            try:
+                contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
+                response_data['old_value'] = contribution.value
+            except Exception as e:
+                response_data['old_value'] = 0
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
@@ -67,6 +71,7 @@ def create_contribution(request):
         except Exception as e:
             print(e)
             response_data['result'] = 'fail'
+            response_data['old_value'] = 0
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
