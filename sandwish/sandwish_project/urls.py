@@ -3,7 +3,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path("", include('sandwish_app.urls')),
-    
+
     #Add Django site authentication urls (for login, logout, password management)
     path("accounts/", include("django.contrib.auth.urls")),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

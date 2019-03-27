@@ -40,9 +40,17 @@ set :branch, ENV['BRANCH'] if ENV['BRANCH']
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-after 'deploy:updating', 'python:create_venv'
 after 'deploy:publishing', 'uwsgi:restart'
+after 'deploy:publishing', 'nginx:restart'
 
+namespace :nginx do
+  desc 'Restart nginx'
+  task :restart do
+    on roles(:web) do |h|
+      execute :sudo, 'sv reload nginx'
+    end
+  end
+end
 
 namespace :uwsgi do
     desc 'Restart application'
@@ -53,6 +61,8 @@ namespace :uwsgi do
     end
 end
 
+
+after 'deploy:updating', 'python:create_venv'
 
 namespace :python do
 
@@ -68,4 +78,37 @@ namespace :python do
 	    execute "#{venv_path}/bin/pip install -r /var/www/sand-wish/current/requirements.txt"
         end
     end
+end
+
+
+after 'deploy:updated', 'django:setProd'
+after 'deploy:updated', 'django:migrate'
+after 'deploy:updated', 'django:collect_static'
+
+namespace :django do
+  
+  def venv_path
+    File.join(shared_path, 'env')
+  end
+
+  desc 'Migrate database'
+  task :migrate do
+    on roles([:app, :web]) do |h|
+      execute "#{venv_path}/bin/python #{release_path}/sandwish/manage.py migrate"
+    end
+  end
+
+  desc 'Collect static files'
+  task :collect_static do
+    on roles([:app, :web]) do |h|
+      execute "#{venv_path}/bin/python #{release_path}/sandwish/manage.py collectstatic --noinput"
+    end
+  end
+
+  desc 'set debug to False'
+  task :setProd do
+    on roles([:app, :web]) do |h|
+      execute "sed -i 's/DEBUG = True/DEBUG = False/g' #{release_path}/sandwish/sand-wish/settings.py"
+    end
+  end
 end

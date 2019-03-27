@@ -5,7 +5,7 @@ from .models import Wishlist
 from django.forms import RegexField
 from django.utils.translation import ugettext_lazy as _
 
-username_regex_field = RegexField(label = "Username", 
+username_regex_field = RegexField(label = "Username",
                                     max_length = 30,
                                     regex = r"^[\w-]+$",
                                     help_text = _("Required. 30 characters or fewer. Letters, digits, - and _ only."))
