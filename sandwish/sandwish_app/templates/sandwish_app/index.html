@@ -3,9 +3,6 @@
 {% block content %}
 <div>Home</div>
     {% load static %}
-
-    {% include "sandwish_app/searchbar.html" %}
-
     <div id="search-results"></div>
 
     {% if user.is_authenticated %}

@@ -1,7 +1,7 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-    {% include "sandwish_app/header.html" %}
+
     <h1>{{ user.get_username }}'s profile</h1>
 
     {% if user.is_authenticated %}
@@ -13,7 +13,7 @@
                         {% csrf_token %}
                         {{ form.as_p }}
                         <input type="submit" class="btn btn-success" value="Create the wishlist" />
-                        <button class="btn btn-danger" onclick="hideFormDisplay()" />Cancel</button>
+                        <button class="btn btn-danger" onclick="hideFormDisplay()" value="Cancel" />
                     </form>
                 </div>
             </div>

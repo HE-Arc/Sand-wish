@@ -3,8 +3,6 @@
 
 {% block content %}
     {% load static %}
-    {% include "sandwish_app/header.html" %}
-
 
     <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm">Go back to {{ wishlists_owner.username }}'s profile</a>
 
