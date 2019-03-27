@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+    {% load static %}
+    {% include "sandwish_app/header.html" %}
 
 
     <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm">Go back to {{ wishlists_owner.username }}'s profile</a>
@@ -33,7 +35,11 @@
         <div class="gift-item border rounded shadow-sm my-2">
         {% endif %}
             <div class="gift-img rounded ">
-                <img class="" src="{{ gift.image }}" />
+                {% if gift.image != None %}
+                    <img class="gift-img" src="{{ gift.image }}" />
+                {% else %}
+                    <img class="gift-img" src="{% static 'images/default_gift.png' %}" />
+                {% endif %}
             </div>
             <div class="gift-infos">
                 <a href="" >

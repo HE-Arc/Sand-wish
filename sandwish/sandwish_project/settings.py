@@ -24,7 +24,7 @@ SECRET_KEY = 'e)j(ihngz)0idd)4y0a%(0#23)3_fq3hxx*p+p$51yf-rc%2o_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['sandwish.srvz-webapp.he-arc.ch', '127.0.0.1', 'localhost']
 
 
 # Application definition
