@@ -36,8 +36,8 @@ class WishlistCreationForm(forms.ModelForm):
         fields = ["title", "description"]
 
 class GiftCreationForm(forms.ModelForm):
-    # image = ImageField(label="Image",
-                        # required=False)
+    image = ImageField(label="Image",
+                        required=False)
     link = URLField(label="Link",
                     required=False)
 

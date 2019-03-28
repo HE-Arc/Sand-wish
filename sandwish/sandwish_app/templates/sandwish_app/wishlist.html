@@ -35,11 +35,7 @@
         <div class="gift-item border rounded shadow-sm my-2">
         {% endif %}
             <div class="gift-img rounded ">
-                {% if gift.0.image != "" %}
-                    <img class="gift-img" src="{{ gift.0.image }}" />
-                {% else %}
-                    <img class="gift-img" src="{% static 'images/default_gift.png' %}" />
-                {% endif %}
+                <img class="gift-img" src="{{ gift.0.image.url }}" />
             </div>
             <div class="gift-infos">
                 <a href="" >

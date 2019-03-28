@@ -16,7 +16,7 @@ class Wishlist(models.Model):
 
 class Gift(models.Model):
     name = models.CharField(max_length=128)
-    image = models.CharField(max_length=128, blank=True)
+    image = models.ImageField(upload_to='uploads/%Y/%m/%d/', default='default_gift.png')
     price = models.DecimalField(max_digits=8, decimal_places=2)
     link = models.CharField(max_length=256, blank=True)
     validated = models.BooleanField(default=False)

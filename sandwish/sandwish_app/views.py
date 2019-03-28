@@ -265,7 +265,6 @@ class GiftValidateView(generic.UpdateView):
 class GiftCreateView(generic.CreateView):
     model = Gift
     form_class = GiftCreationForm
-    # fields = ["name", "price", "image", "link"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
