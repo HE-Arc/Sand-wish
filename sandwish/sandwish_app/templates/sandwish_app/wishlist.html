@@ -53,13 +53,15 @@
                 <div id="full_contribution{{ gift.0.id }}">
                     {{ gift.1 }}
                 </div>
-                <div class="gift-contribution">
-                    <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
-                        {% csrf_token %}
-                        <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
-                        <input type="submit" value="Post" class="">
-                    </form>
-                </div>
+                {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
+                    <div class="gift-contribution">
+                        <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
+                            {% csrf_token %}
+                            <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
+                            <input type="submit" value="Post" class="">
+                        </form>
+                    </div>
+                {% endif %}
             </div>
         {% if is_wishlists_owner %}
             <div class="gift-actions">
