@@ -123,9 +123,9 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = '/var/www/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'sandwish_app/static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'sandwish_app/static'),
+# )
 
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
