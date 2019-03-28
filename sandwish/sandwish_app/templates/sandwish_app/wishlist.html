@@ -27,7 +27,7 @@
     </div>
     {% endif %}
 
-    <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib and gift.3 = max possible contribution -->
+    <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution and gift.4 = all contributors -->
     {% for gift in gifts %}
         {% if gift.0.validated %}
         <div class="gift-item border rounded shadow-sm my-2 alert-success">
@@ -50,9 +50,11 @@
                 <div class="">
                     {{ gift.0.price }}
                 </div>
-                <div id="full_contribution{{ gift.0.id }}">
-                    {{ gift.1 }}
-                </div>
+                {% if  not gift.0.validated %}
+                    <div id="full_contribution{{ gift.0.id }}">
+                        {{ gift.1 }}
+                    </div>
+                {% endif %}
                 {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
                     <div class="gift-contribution">
                         <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
@@ -60,6 +62,15 @@
                             <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
                             <input type="submit" value="Post" class="">
                         </form>
+                    </div>
+                {% endif %}
+                {% if gift.0.validated %}
+                    <div class="contributors">
+                        <ul>
+                            {% for contributor in gift.4 %}
+                                <li>{{ contributor }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 {% endif %}
             </div>
