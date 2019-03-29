@@ -8,12 +8,16 @@ from django.utils.translation import ugettext_lazy as _
 username_regex_field = RegexField(label = "Username",
                                     max_length = 30,
                                     regex = r"^[\w-]+$",
-                                    help_text = _("Required. 30 characters or fewer. Letters, digits, - and _ only."))
+                                    help_text = _("Required. 30 characters or fewer. Letters, digits, - and _ only."),
+                                    widget=forms.TextInput (attrs={'class': "form-control"}))
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.',
+                                    widget=forms.TextInput (attrs={'class': "form-control"}))
+    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.',
+                                    widget=forms.TextInput (attrs={'class': "form-control"}))
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.',
+                                    widget=forms.TextInput (attrs={'class': "form-control"}))
     username = username_regex_field
 
     class Meta:
@@ -29,7 +33,8 @@ class WishlistCreationForm(forms.ModelForm):
                             'placeholder' : "Wishlist's name"}))
     description = forms.CharField(label="", widget=forms.Textarea (attrs={
                             'class': "form-control",
-                            'placeholder' : "Wishlist's description"}))
+                            'placeholder' : "Wishlist's description",
+                            'rows' : "3"}))
 
     class Meta:
         model = Wishlist
