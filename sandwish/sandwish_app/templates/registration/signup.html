@@ -1,21 +1,25 @@
 {% extends 'sandwish_app/base_generic.html' %}
 
 {% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </p>
-    {% endfor %}
-    <button type="submit">Sign up</button>
-  </form>
+<div class="row justify-content-center mt-2 px-2 px-md-0">
+    <div class="border rounded col-lg-6 col-md-8 col-sm-12 p-3">
+        <h1>Sign up</h1>
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                    <br>{{ field.label_tag }}
+                    <br>{{ field }}
+                    {% if field.help_text %}
+                        <small style="color: grey">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
+                    {% endfor %}
+            {% endfor %}
+            <button class="btn btn-success mt-2" type="submit">Sign up</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
