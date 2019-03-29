@@ -4,7 +4,7 @@ from django.views import generic, View
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
-from .forms import WishlistCreationForm
+from .forms import WishlistCreationForm, GiftCreationForm
 import json as json
 from django.core import serializers
 
@@ -160,7 +160,6 @@ class WishlistView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["wishlists_owner"] = User.objects.get(username=self.kwargs["username"])
         context["wishlist"] = self.object
-        #context["gifts"] = Gift.objects.filter(fk_wishlist=context["wishlist"].id)
         context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
 
         # faut faire une liste des cadeau associé à leur contribution et à la courante
@@ -171,15 +170,19 @@ class WishlistView(generic.DetailView):
 
             total_contribution = 0
             user_contribution = 0
+            contributors = []
             for contribution in Contribution.objects.filter(fk_gift=gift.id):
                 total_contribution += contribution.value
                 if contribution.fk_user.id == self.request.user.id:
                     user_contribution = contribution.value
+                contributors.append(contribution.fk_user.username)
             full_gift.append(total_contribution)
             full_gift.append(user_contribution)
             full_gift.append(gift.price - total_contribution + user_contribution)
+            full_gift.append(contributors)
             gifts.append(full_gift)
         context["gifts"] = gifts
+        print(gifts)
         return context
 
 class WishlistDeleteView(generic.DeleteView):
@@ -264,7 +267,7 @@ class GiftValidateView(generic.UpdateView):
 
 class GiftCreateView(generic.CreateView):
     model = Gift
-    fields = ["name", "price", "image", "link"]
+    form_class = GiftCreationForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
