@@ -132,5 +132,13 @@ STATICFILES_DIRS = (
 LOGIN_REDIRECT_URL = 'login_redirect'
 
 # Uploaded files storage
-MEDIA_ROOT = os.path.join(BASE_DIR, 'sandwish_app/media').replace('\\', '/')
-MEDIA_URL = '/sandwish_app/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'sandwish_app/media').replace('\\', '/')
+# MEDIA_URL = '/sandwish_app/media/'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/var/www/media/'
+
+MEDIAFILES_DIRS = (
+    os.path.join(BASE_DIR, 'sandwish_app/media'),
+)
