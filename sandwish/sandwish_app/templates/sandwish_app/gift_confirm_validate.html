@@ -2,20 +2,17 @@
 
 {% block content %}
 
-    <div class="card">
-        <div class="card-body">
-            <h1>Are you sure you want to validate  "{{ object }}"?</h1>
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="alert alert-danger">
-                    Are you sure you want to validate  "{{ object }}"?
-                </div>
-                <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist.id %}" class="btn btn-danger">Cancel</a>
-                <input class="btn btn-success" type="submit" value="Confirm" />
-            </form>
-        </div>
+    <div class="border rounded mt-2 p-3">
+        <h1>Validate a gift !</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="alert alert-danger">
+                Are you sure you want to validate  "{{ object }}"? <br>
+                This operation cannot be cancelled !
+            </div>
+            <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist.id %}" class="btn btn-danger">Cancel</a>
+            <input class="btn btn-success" type="submit" value="Confirm" />
+        </form>
     </div>
-
-
 
 {% endblock %}
