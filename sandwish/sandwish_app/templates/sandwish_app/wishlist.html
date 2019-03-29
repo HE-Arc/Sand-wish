@@ -35,11 +35,7 @@
         <div class="gift-item border rounded shadow-sm my-2">
         {% endif %}
             <div class="gift-img rounded ">
-                {% if gift.0.image != None %}
-                    <img class="gift-img" src="{{ gift.0.image }}" />
-                {% else %}
-                    <img class="gift-img" src="{% static 'images/default_gift.png' %}" />
-                {% endif %}
+                <img class="gift-img" src="{{ gift.0.image.url }}" />
             </div>
             <div class="gift-infos">
                 <a href="" >
@@ -76,7 +72,7 @@
             </div>
         {% if is_wishlists_owner %}
             <div class="gift-actions">
-                {% if gift.0.link != Null %}
+                {% if gift.0.link != "" %}
                     <a href="{{ gift.0.link }}" target="_blank" class="btn btn-info"><img src="{% static 'icons/buy-icon.png' %}" /></a>
                 {% endif %}
                 {% if not gift.0.validated %}

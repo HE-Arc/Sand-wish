@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Wishlist
-from django.forms import RegexField
+from .models import Wishlist, Gift
+from django.forms import RegexField, URLField, ImageField
 from django.utils.translation import ugettext_lazy as _
 
 username_regex_field = RegexField(label = "Username", 
@@ -34,3 +34,13 @@ class WishlistCreationForm(forms.ModelForm):
     class Meta:
         model = Wishlist
         fields = ["title", "description"]
+
+class GiftCreationForm(forms.ModelForm):
+    image = ImageField(label="Image",
+                        required=False)
+    link = URLField(label="Link",
+                    required=False)
+
+    class Meta:
+        model = Gift
+        fields = ['name', 'image', 'price', 'link']
