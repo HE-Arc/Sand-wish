@@ -41,10 +41,8 @@ def login_redirect(request):
 
 def create_contribution(request):
     if request.method == 'POST':
-        print("------------------------------in create contribution---------------------------------")
         value = request.POST.get('value')
         giftId = request.POST.get('giftId')
-        print("---", giftId)
         gift = Gift.objects.get(id=giftId)
 
         response_data = {}
@@ -182,7 +180,6 @@ class WishlistView(generic.DetailView):
             full_gift.append(contributors)
             gifts.append(full_gift)
         context["gifts"] = gifts
-        print(gifts)
         return context
 
 class WishlistDeleteView(generic.DeleteView):
