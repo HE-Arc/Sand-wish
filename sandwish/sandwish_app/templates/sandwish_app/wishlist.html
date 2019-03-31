@@ -44,9 +44,12 @@
                     <div class="gift-contribution">
                         <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
                             {% csrf_token %}
-                            <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
+                            <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}" min="1" max="{{ gift.3 }}" required="required">
                             <input type="submit" value="Contribute" class="">
                         </form>
+                        <div id="contribution-error{{ gift.0.id }}">
+
+                        </div>
                     </div>
                 {% endif %}
                 {% if gift.0.validated %}

@@ -10,7 +10,6 @@ function contributionSubmit(giftId, last_value, csrf_token)
 // AJAX for posting
 function create_contribution(giftId, last_value, csrf_token) {
     valueFieldName = '#contribution' + giftId;
-    console.log(giftId);
 
     $.ajax({
         url : "/contribution/create/", // the endpoint
@@ -19,7 +18,7 @@ function create_contribution(giftId, last_value, csrf_token) {
 
         // handle a successful response
         success : function(json) {
-            console.log(json); // log the returned json to the console
+            // console.log(json); // log the returned json to the console
             if (json.result == "success")
             {
                 $("#full_contribution" + giftId).text(json.new_total_contribution);
@@ -27,6 +26,7 @@ function create_contribution(giftId, last_value, csrf_token) {
             else if (json.result == "fail")
             {
                 $(valueFieldName).val(json.old_value);
+                $('#contribution-error' + giftId).text(json.error_message);
             }
         },
 
