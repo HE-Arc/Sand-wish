@@ -2,26 +2,37 @@
 
 {% block content %}
 
-    <h1>{{ profiles_owner.get_username }}'s profile</h1>
-    {% if user.is_authenticated %}
-        {% if is_profiles_owner %}
-            <button id="show_form_button" onclick="showFormDisplay()" class="btn btn-primary" >Create a wishlist</button>
-            <div id="wishlist_creation_form" class="row px-3 justify-content-center" style="display: none;">
-                <div class="border rounded p-3 col-md-6 ">
-                    <form  action="" method="post" >
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input type="submit" class="btn btn-success" value="Create the wishlist" />
-                        <button class="btn btn-danger" onclick="hideFormDisplay()">Cancel</button>
-                    </form>
+    <div class="mt-2">
+        <h1>{{ profiles_owner.get_username }}'s profile</h1>
+        {% if user.is_authenticated %}
+            {% if is_profiles_owner %}
+                <button id="show_form_button" onclick="showFormDisplay()" class="btn btn-success" >Create a wishlist</button>
+                <div id="wishlist_creation_form" class="row px-3 justify-content-center" style="display: none;">
+                    <div class="border rounded p-3 col-12 ">
+                        <h3>Create a new wishlist</h3>
+                        <form  action="" method="post" >
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button class="btn btn-danger" onclick="hideFormDisplay()">Cancel</button>
+                            <input type="submit" class="btn btn-success" value="Create the wishlist" />
+                        </form>
+                    </div>
                 </div>
+    </div>
+            <h2 class="mt-4">Your wishlists</h2>
+            {% else %}
             </div>
+                <h2 class="mt-4">User's wishlists</h2>
+            {% endif %}
+        {% else %}
+        </div>
+            <h2 class="mt-4">User's wishlists</h2>
         {% endif %}
-    {% endif %}
+    <hr>
 
-    <div class="row px-3">
+    <div class="row px-3 mt-3">
         {% for w in wishlists %}
-            <div class="col-md-6 p-0">
+            <div class="col-md-6 p-1">
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title">{{ w.title }}</h3>

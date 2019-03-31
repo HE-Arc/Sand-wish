@@ -5,26 +5,21 @@
     {% load static %}
     <script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
 
-    <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm">Go back to {{ wishlists_owner.username }}'s profile</a>
+    <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm mt-2">Go back to {{ wishlists_owner.username }}'s profile</a>
 
-
-    <div class="card w-100">
+    <div class="card w-100 my-2">
         <div class="card-body">
             <h1 class="card-title">{{ wishlist.title }}</h1>
             <p class="card-text">{{ wishlist.description }}</p>
         </div>
+    </div>
 
-            </div>
+    <h3 class="mt-4">Wishlist's gifts</h3><hr>
 
     {% if is_wishlists_owner %}
-    <div class="row px-3">
-        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="col-10 p-0">
-            <div class="big-btn-add rounded border-success">
-                +
-            </div>
+        <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">
+            Add a gift
         </a>
-
-    </div>
     {% endif %}
     <img class="gift-img" src="/sandwish_app/media/default_gift.png">
     <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution and gift.4 = all contributors -->
@@ -38,17 +33,12 @@
                 <img class="gift-img" src="{{ gift.0.image.url }}" />
             </div>
             <div class="gift-infos">
-                <a href="" >
-                    <h4>
-                        {{ gift.0.name }}
-                    </h4>
-                </a>
-                <div class="">
-                    {{ gift.0.price }}
-                </div>
+                <h4>{{ gift.0.name }}</h4>
+                <div>{{ gift.0.price }}</div>
                 {% if  not gift.0.validated %}
-                    <div id="full_contribution{{ gift.0.id }}">
-                        {{ gift.1 }}
+                    <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="25%" aria-valuenow="{{ gift.1 }}" aria-valuemin="0" aria-valuemax="{{ gift.0.price }}"></div>
                     </div>
                 {% endif %}
                 {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
@@ -70,17 +60,18 @@
                     </div>
                 {% endif %}
             </div>
-        {% if is_wishlists_owner %}
-            <div class="gift-actions">
-                {% if gift.0.link != "" %}
-                    <a href="{{ gift.0.link }}" target="_blank" class="btn btn-info"><img src="{% static 'icons/buy-icon.png' %}" /></a>
-                {% endif %}
+        <div class="gift-actions flex-container">
+            {% if gift.0.link != "" %}
+                <a href="{{ gift.0.link }}" target="_blank" class="btn btn-info btn-sm"><img src="{% static 'icons/buy-icon.png' %}" /></a>
+            {% endif %}
+
+            {% if is_wishlists_owner %}
                 {% if not gift.0.validated %}
-                    <a href="{% url 'gift-validate' gift.0.id %}" class="btn btn-primary"><img src="{% static 'icons/validate-icon.png' %}" /></a>
+                    <a href="{% url 'gift-validate' gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>
                 {% endif %}
-                <a href="{% url 'gift-delete' gift.0.id %}" class="btn btn-danger"><img src="{% static 'icons/delete-icon.png' %}" /></a>
-            </div>
-        {% endif %}
+                <a href="{% url 'gift-delete' gift.0.id %}" class="btn btn-danger btn-sm"><img src="{% static 'icons/delete-icon.png' %}" /></a>
+            {% endif %}
         </div>
+    </div>
     {% endfor %}
 {% endblock %}
