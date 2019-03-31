@@ -21,7 +21,6 @@
             Add a gift
         </a>
     {% endif %}
-    <img class="gift-img" src="/sandwish_app/media/default_gift.png">
     <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution and gift.4 = all contributors -->
     {% for gift in gifts %}
         {% if gift.0.validated %}
@@ -46,7 +45,7 @@
                         <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
                             {% csrf_token %}
                             <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
-                            <input type="submit" value="Post" class="">
+                            <input type="submit" value="Contribute" class="">
                         </form>
                     </div>
                 {% endif %}
