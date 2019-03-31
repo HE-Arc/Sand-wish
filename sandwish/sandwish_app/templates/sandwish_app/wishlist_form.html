@@ -11,7 +11,7 @@
         <form  action="" method="post"> 
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="btn btn-danger">Cancel</button>
+            <button id="hide_form_button" class="btn btn-danger" type="button">Cancel</button>
             <input type="submit" class="btn btn-success" value="Create the wishlist" />
         </form>
     </div>
