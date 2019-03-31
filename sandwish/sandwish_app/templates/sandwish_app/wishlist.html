@@ -65,7 +65,7 @@
             {% endif %}
 
             {% if is_wishlists_owner %}
-                {% if not gift.0.validated %}
+                {% if not gift.0.validated and gift.1 == gift.0.price %}
                     <a href="{% url 'gift-validate' gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>
                 {% endif %}
                 <a href="{% url 'gift-delete' gift.0.id %}" class="btn btn-danger btn-sm"><img src="{% static 'icons/delete-icon.png' %}" /></a>
