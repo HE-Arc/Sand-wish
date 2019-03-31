@@ -1,0 +1,18 @@
+
+{% load static %}
+<script type="text/javascript" src="{% static 'scripts/wishlist_form.js' %}"></script>
+
+<button id="show_form_button" class="btn btn-success" >Create a wishlist</button>
+<div id="wishlist_creation_form" class="row px-3 justify-content-center" style="display: none;">
+    <div class="border rounded p-3 col-12 ">
+        
+        <!-- Wishlist creation form -->
+        <h3>Create a new wishlist</h3>
+        <form  action="" method="post"> 
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-danger">Cancel</button>
+            <input type="submit" class="btn btn-success" value="Create the wishlist" />
+        </form>
+    </div>
+</div>

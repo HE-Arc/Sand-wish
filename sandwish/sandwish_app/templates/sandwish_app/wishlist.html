@@ -1,12 +1,12 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-
     {% load static %}
     <script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
 
     <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm mt-2">Go back to {{ wishlists_owner.username }}'s profile</a>
 
+    <!-- Wishlist's header -->
     <div class="card w-100 my-2">
         <div class="card-body">
             <h1 class="card-title">{{ wishlist.title }}</h1>
@@ -16,55 +16,64 @@
 
     <h3 class="mt-4">Wishlist's gifts</h3><hr>
 
+    <!-- Add a gift button -->
     {% if is_wishlists_owner %}
         <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">
             Add a gift
         </a>
     {% endif %}
 
-    <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution and gift.4 = all contributors -->
+    <!-- Display gifts -->
+    <!-- gift.0 = current gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution and gift.4 = all contributors -->
     {% for gift in gifts %}
         {% if gift.0.validated %}
-        <div class="gift-item border rounded shadow-sm my-2 alert-success">
+            <div class="gift-item border rounded shadow-sm my-2 alert-success">
         {% else %}
-        <div class="gift-item border rounded shadow-sm my-2">
+            <div class="gift-item border rounded shadow-sm my-2">
         {% endif %}
-            <div class="gift-img rounded ">
-                <img class="gift-img" src="{{ gift.0.image.url }}" />
-            </div>
-            <div class="gift-infos">
-                <h4>{{ gift.0.name }}</h4>
-                <div>{{ gift.0.price }}</div>
-                {% if  not gift.0.validated %}
-                    <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="25%" aria-valuenow="{{ gift.1 }}" aria-valuemin="0" aria-valuemax="{{ gift.0.price }}"></div>
-                    </div>
-                {% endif %}
-                {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
-                    <div class="gift-contribution">
-                        <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
-                            {% csrf_token %}
-                            <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
-                            <input type="submit" value="Post" class="">
-                        </form>
-                    </div>
-                {% endif %}
-                {% if gift.0.validated %}
-                    <div class="contributors">
-                        <ul>
-                            {% for contributor in gift.4 %}
-                                <li>{{ contributor }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
+
+        <!-- Gift's image -->
+        <div class="gift-img rounded ">
+            <img class="gift-img" src="{{ gift.0.image.url }}" />
+        </div>
+
+        <!-- Gift's information -->
+        <div class="gift-infos">
+            <h4>{{ gift.0.name }}</h4>
+            <div>{{ gift.0.price }}</div>
+            
+            <!-- Progress bar -->
+            {% if  not gift.0.validated %}
+                <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="25%" aria-valuenow="{{ gift.1 }}" aria-valuemin="0" aria-valuemax="{{ gift.0.price }}"></div>
+                </div>
+            {% endif %}
+
+            <!-- Contribution form -->
+            {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
+                {% include "sandwish_app/gift_contribution_form.html" %}
+            {% endif %}
+
+            <!-- Contributors -->
+            {% if gift.0.validated %}
+                <div class="contributors">
+                    <ul>
+                        {% for contributor in gift.4 %}
+                            <li>{{ contributor }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
         <div class="gift-actions flex-container">
+            <!-- Link (optional) -->
             {% if gift.0.link != "" %}
                 <a href="{{ gift.0.link }}" target="_blank" class="btn btn-info btn-sm"><img src="{% static 'icons/buy-icon.png' %}" /></a>
             {% endif %}
 
+            <!-- Control buttons for validation and deletion -->
             {% if is_wishlists_owner %}
                 {% if not gift.0.validated %}
                     <a href="{% url 'gift-validate' gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>

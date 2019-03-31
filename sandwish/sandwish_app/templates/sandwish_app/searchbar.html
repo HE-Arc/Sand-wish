@@ -7,7 +7,6 @@
 
 <form class="" id="search-form" method="post" action="{% url 'search' %}" onsubmit="search('{{ csrf_token }}')">
     {% csrf_token %}
-
     <div class="input-group mr-3">
         <input type="search" class="form-control" id="search-field" value="{{ search }}" pattern="^[\w-]+$" placeholder="Search username...">
         <div class="input-group-append">
