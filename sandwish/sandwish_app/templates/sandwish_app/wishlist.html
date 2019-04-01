@@ -46,7 +46,6 @@
             {% if  not gift.0.validated %}
                 <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
                 <div class="progress">
-                    <!-- <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="25%" aria-valuenow="{{ gift.1 }}" aria-valuemin="0" aria-valuemax="{{ gift.0.price }}"></div> -->
                     <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
                     <div id="user-progress-bar{{ gift.0.id }}" class="progress-bar bg-success" role="progressbar" style="width: {{ gift.6 }}%">{{ gift.2 }}</div>
                 </div>

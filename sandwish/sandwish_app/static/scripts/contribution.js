@@ -23,7 +23,7 @@ function create_contribution(giftId, csrf_token) {
         data : {
             "value": $(valueFieldName).val(),
             "giftId": giftId,
-            'csrfmiddlewaretoken': csrf_token
+            "csrfmiddlewaretoken": csrf_token
         },
 
         // handle a successful response
