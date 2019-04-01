@@ -5,10 +5,10 @@
 <button id="show_form_button" class="btn btn-success" >Create a wishlist</button>
 <div id="wishlist_creation_form" class="row px-3 justify-content-center" style="display: none;">
     <div class="border rounded p-3 col-12 ">
-        
+
         <!-- Wishlist creation form -->
         <h3>Create a new wishlist</h3>
-        <form  action="" method="post"> 
+        <form  action="" method="post">
             {% csrf_token %}
             {{ form.as_p }}
             <button id="hide_form_button" class="btn btn-danger" type="button">Cancel</button>

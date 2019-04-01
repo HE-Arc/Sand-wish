@@ -22,65 +22,81 @@
             Add a gift
         </a>
     {% endif %}
+    <!-- Display gifts -->
     <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution, gift.4 = all contributors
     gift.5 = % of contribution from other user, gift.6 = % of our contribution, gift.7 = total of other user contribution -->
     {% for gift in gifts %}
         {% if gift.0.validated %}
             <div class="gift-item border rounded shadow-sm my-2 alert-success">
         {% else %}
-        <div class="gift-item border rounded shadow-sm my-2 bg-white">
+        <div class="gift-item border rounded shadow-sm my-2">
         {% endif %}
-            <div class="gift-img rounded ">
-                <img class="gift-img" src="{{ gift.0.image.url }}" />
-            </div>
-            <div class="gift-infos">
-                <h4 class="mt-2">{{ gift.0.name }} - <span style="color: grey">{{ gift.0.price }} CHF </span></h4>
-                {% if  not gift.0.validated %}
-                    <div class="progress my-3">
-                        <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
-                        <div id="user-progress-bar{{ gift.0.id }}" class="progress-bar bg-success" role="progressbar" style="width: {{ gift.6 }}%">{{ gift.2 }}</div>
-                    </div>
-                {% endif %}
-                {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
-                    <div class="gift-contribution">
-                        <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
-                            {% csrf_token %}
-                            <div class="input-group">
-                                <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}" min="1" max="{{ gift.3 }}" required="required" class="form-control">
-                                <div class="input-group-append">
-                                    <input type="submit" value="Contribute" class="btn btn-dark">
-                                </div>
-                            </div>
-                        </form>
-                        <div id="contribution-error{{ gift.0.id }}">
-                        </div>
-                    </div>
-                {% endif %}
-                {% if gift.0.validated %}
-                    <br>
-                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#contributors">Show contributors</button>
-                    <div id="contributors" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Contributors for {{ gift.0 }}</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <ul>
-                                        {% for contributor in gift.4 %}
-                                            <li>{{ contributor }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
+
+        <!-- Gift's image -->
+        <div class="gift-img rounded ">
+            <img class="gift-img" src="{{ gift.0.image.url }}" />
+        </div>
+
+        <!-- Gift's information -->
+        <div class="gift-infos">
+            <h4>{{ gift.0.name }}</h4>
+            <div>{{ gift.0.price }}</div>
+
+            <!-- Progress bar -->
+            {% if  not gift.0.validated %}
+                <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
+                <div class="progress">
+                    <!-- <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="25%" aria-valuenow="{{ gift.1 }}" aria-valuemin="0" aria-valuemax="{{ gift.0.price }}"></div> -->
+                    <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
+                    <div id="user-progress-bar{{ gift.0.id }}" class="progress-bar bg-success" role="progressbar" style="width: {{ gift.6 }}%">{{ gift.2 }}</div>
+                </div>
+            {% endif %}
+
+            <!-- Contribution form -->
+            {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
+                <!-- {% include "sandwish_app/gift_contribution_form.html" %} -->
+                <div class="gift-contribution">
+                    <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ csrf_token }}')">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}" min="1" max="{{ gift.3 }}" required="required" class="form-control">
+                            <div class="input-group-append">
+                                <input type="submit" value="Contribute" class="btn btn-dark">
                             </div>
                         </div>
+                    </form>
+                    <div id="contribution-error{{ gift.0.id }}">
                     </div>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
+
+            <!-- Contributors -->
+            {% if gift.0.validated %}
+                <br>
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#contributors">Show contributors</button>
+                <div id="contributors" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Contributors for {{ gift.0 }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <ul>
+                                    {% for contributor in gift.4 %}
+                                        <li>{{ contributor }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
         <div class="gift-actions flex-container">
             <!-- Link (optional) -->
             {% if gift.0.link != "" %}
