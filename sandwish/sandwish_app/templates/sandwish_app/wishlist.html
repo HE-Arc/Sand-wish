@@ -22,7 +22,7 @@
         </a>
     {% endif %}
     <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution, gift.4 = all contributors
-    gift.5 = % of contribution from other people, gift.6 = % of our contribution -->
+    gift.5 = % of contribution from other user, gift.6 = % of our contribution, gift.7 = total of other user contribution -->
     {% for gift in gifts %}
         {% if gift.0.validated %}
         <div class="gift-item border rounded shadow-sm my-2 alert-success">
@@ -36,8 +36,8 @@
                 <h4 class="mt-2">{{ gift.0.name }} - <span style="color: grey">{{ gift.0.price }} CHF </span></h4>
                 {% if  not gift.0.validated %}
                     <div class="progress my-3">
-                        <div class="progress-bar" role="progressbar" style="width: 40%" >{{ gift.1 }}</div>
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 10%">{{ gift.2 }}</div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
+                        <div id="user-progress-bar{{ gift.0.id }}" class="progress-bar bg-success" role="progressbar" style="width: {{ gift.6 }}%">{{ gift.2 }}</div>
                     </div>
                 {% endif %}
                 {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}

@@ -182,6 +182,7 @@ class WishlistView(generic.DetailView):
             full_gift.append(contributors)
             full_gift.append((total_contribution - user_contribution) / gift.price * 100)
             full_gift.append(user_contribution / gift.price * 100)
+            full_gift.append(total_contribution - user_contribution)
             gifts.append(full_gift)
         context["gifts"] = gifts
         return context
