@@ -32,20 +32,23 @@
                 <img class="gift-img" src="{{ gift.0.image.url }}" />
             </div>
             <div class="gift-infos">
-                <h4>{{ gift.0.name }}</h4>
-                <div>{{ gift.0.price }}</div>
+                <h4 class="mt-2">{{ gift.0.name }} - <span style="color: grey">{{ gift.0.price }} CHF </span></h4>
                 {% if  not gift.0.validated %}
-                    <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="25%" aria-valuenow="{{ gift.1 }}" aria-valuemin="0" aria-valuemax="{{ gift.0.price }}"></div>
+                    <div class="progress my-3">
+                        <div class="progress-bar" role="progressbar" style="width: 40%" >{{ gift.1 }}</div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 10%">{{ gift.2 }}</div>
                     </div>
                 {% endif %}
                 {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
                     <div class="gift-contribution">
                         <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.2 }}', '{{ csrf_token }}')">
                             {% csrf_token %}
-                            <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}">
-                            <input type="submit" value="Contribute" class="">
+                            <div class="input-group">
+                                <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}" class="form-control">
+                                <div class="input-group-append">
+                                    <input type="submit" value="Contribute" class="btn btn-dark">
+                                </div>
+                            </div>
                         </form>
                     </div>
                 {% endif %}
