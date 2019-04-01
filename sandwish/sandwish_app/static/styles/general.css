@@ -1,3 +1,6 @@
+body {
+  background: radial-gradient(white, #EEE) fixed;
+}
 
 .gift-item {
     box-sizing: border-box;
@@ -41,4 +44,8 @@
 {
     width: 20px;
     height: 20px;
+}
+
+.bg-white{
+    background-color: #FFF;
 }
