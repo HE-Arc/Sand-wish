@@ -54,7 +54,7 @@ class GiftCreationForm(forms.ModelForm):
     Gift creation formular.
     """
     name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
-    price = forms.CharField(widget=forms.NumberInput(attrs={"class": "form-control"}))
+    price = forms.DecimalField(min_value=1, widget=forms.NumberInput(attrs={"class": "form-control"}))
     image = ImageField(label=_("Image"), required=False)
     link = URLField(label=_("Link"), required=False, widget=forms.URLInput(attrs={"class": "form-control"}))
 
