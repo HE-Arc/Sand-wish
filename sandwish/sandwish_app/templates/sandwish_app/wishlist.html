@@ -43,7 +43,7 @@
             <div>{{ gift.0.price }}</div>
 
             <!-- Progress bar -->
-            {% if  not gift.0.validated %}
+            {% if not gift.0.validated %}
                 <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
@@ -53,20 +53,7 @@
 
             <!-- Contribution form -->
             {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
-                <!-- {% include "sandwish_app/gift_contribution_form.html" %} -->
-                <div class="gift-contribution">
-                    <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ csrf_token }}')">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}" min="1" max="{{ gift.3 }}" required="required" class="form-control">
-                            <div class="input-group-append">
-                                <input type="submit" value="Contribute" class="btn btn-dark">
-                            </div>
-                        </div>
-                    </form>
-                    <div id="contribution-error{{ gift.0.id }}">
-                    </div>
-                </div>
+                {% include "sandwish_app/gift_contribution_form.html" %}
             {% endif %}
 
             <!-- Contributors -->
