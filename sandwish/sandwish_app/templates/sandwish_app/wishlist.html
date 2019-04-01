@@ -39,13 +39,11 @@
 
         <!-- Gift's information -->
         <div class="gift-infos">
-            <h4>{{ gift.0.name }}</h4>
-            <div>{{ gift.0.price }}</div>
+            <h4 class="mt-2">{{ gift.0.name }} - <span style="color: grey">{{ gift.0.price }} CHF</span></h4>
 
             <!-- Progress bar -->
             {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
-                <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
-                <div class="progress">
+                <div class="progress my-3">
                     <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
                     <div id="user-progress-bar{{ gift.0.id }}" class="progress-bar bg-success" role="progressbar" style="width: {{ gift.6 }}%">{{ gift.2 }}</div>
                 </div>
