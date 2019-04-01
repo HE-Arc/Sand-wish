@@ -134,7 +134,8 @@ LOGIN_REDIRECT_URL = 'login_redirect'
 # MEDIA_URL = '/sandwish_app/media/'
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/var/www/media/'
+# MEDIA_ROOT = '/var/www/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIAFILES_DIRS = (
     # os.path.join(BASE_DIR, 'sandwish_app/media'),
