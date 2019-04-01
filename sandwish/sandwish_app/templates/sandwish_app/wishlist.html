@@ -21,7 +21,8 @@
             Add a gift
         </a>
     {% endif %}
-    <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution and gift.4 = all contributors -->
+    <!-- gift.0 = actual gift, gift.1 = total contrib, gift.2 = user contrib, gift.3 = max possible contribution, gift.4 = all contributors
+    gift.5 = % of contribution from other people, gift.6 = % of our contribution -->
     {% for gift in gifts %}
         {% if gift.0.validated %}
         <div class="gift-item border rounded shadow-sm my-2 alert-success">
