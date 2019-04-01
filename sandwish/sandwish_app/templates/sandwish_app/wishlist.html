@@ -1,12 +1,12 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-
     {% load static %}
     <script type = "text/javascript" src="{% static 'scripts/contribution.js' %}" ></script>
 
     <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-outline-secondary btn-sm mt-2">Go back to {{ wishlists_owner.username }}'s profile</a>
 
+    <!-- Wishlist's header -->
     <div class="card w-100 my-2">
         <div class="card-body">
             <h1 class="card-title">{{ wishlist.title }}</h1>
@@ -16,6 +16,7 @@
 
     <h3 class="mt-4">Wishlist's gifts</h3><hr>
 
+    <!-- Add a gift button -->
     {% if is_wishlists_owner %}
         <a href="{% url 'gift-create' wishlists_owner.username wishlist.id %}" class="btn btn-success">
             Add a gift
@@ -25,7 +26,7 @@
     gift.5 = % of contribution from other user, gift.6 = % of our contribution, gift.7 = total of other user contribution -->
     {% for gift in gifts %}
         {% if gift.0.validated %}
-        <div class="gift-item border rounded shadow-sm my-2 alert-success">
+            <div class="gift-item border rounded shadow-sm my-2 alert-success">
         {% else %}
         <div class="gift-item border rounded shadow-sm my-2 bg-white">
         {% endif %}
@@ -81,10 +82,12 @@
                 {% endif %}
             </div>
         <div class="gift-actions flex-container">
+            <!-- Link (optional) -->
             {% if gift.0.link != "" %}
                 <a href="{{ gift.0.link }}" target="_blank" class="btn btn-info btn-sm"><img src="{% static 'icons/buy-icon.png' %}" /></a>
             {% endif %}
 
+            <!-- Control buttons for validation and deletion -->
             {% if is_wishlists_owner %}
                 {% if not gift.0.validated and gift.1 == gift.0.price %}
                     <a href="{% url 'gift-validate' gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>

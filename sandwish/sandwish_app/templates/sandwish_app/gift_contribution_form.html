@@ -1,0 +1,8 @@
+
+<div class="gift-contribution">
+    <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ csrf_token }}')">
+        {% csrf_token %}
+        <input type="number" id="contribution{{ gift.0.id }}" step="0.5" min="0.0" value="{{ gift.2 }} required">
+        <input type="submit" value="Post" class="">
+    </form>
+</div>

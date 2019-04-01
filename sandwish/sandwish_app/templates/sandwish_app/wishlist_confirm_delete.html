@@ -1,15 +1,12 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-    <div class="border rounded mt-2 p-3 bg-white">
-        <h1>Delete a wishlist !</h1>
+    <div class="container">
         <form action="" method="post">
             {% csrf_token %}
-            <div class="alert alert-danger">
-                Are you sure you want to delete "{{ object }}"?
-            </div>
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" value="Confirm" />
             <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist_to_remove.id %}" class="btn btn-danger">Cancel</a>
-            <input class="btn btn-success" type="submit" value="Confirm" />
         </form>
     </div>
 {% endblock %}

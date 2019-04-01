@@ -21,18 +21,6 @@ function initEvents() {
 
     searchField.autocomplete({ source: autocompleteSource });
 
-    // prevent user using illegal characters
-    // searchField.keypress(e => {
-    //     let kc = e.which;
-    //     if (!((kc >= 48 && kc <= 57) || // digits
-    //          (kc >= 65 && kc <= 90)  || // letters (uppercase)
-    //          (kc >= 97 && kc <= 122) || // letters (lowercase)
-    //          kc === 45               || // -
-    //          kc === 95               || // _
-    //          kc === 13))
-    //         e.preventDefault();
-    // });
-
     searchField.keyup(_ => {
         if (searchField.val().length > 0)
             $("#search-form").submit();
