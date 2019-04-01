@@ -64,8 +64,8 @@ def create_contribution(request):
             currentContributionValue += contribution.value
 
         if float(value) < 1 or float(value) > (gift.price - currentContributionValue):
-            response_data['result'] = 'fail'
-            response_data['error_message'] = "the total contribution exceeded the price of the gift"
+            response_data["result"] = "fail"
+            response_data["error_message"] = "the total contribution exceeded the price of the gift"
             try:
                 contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
                 response_data["old_value"] = float(contribution.value)
@@ -89,9 +89,9 @@ def create_contribution(request):
             response_data["result"] = "success"
         except Exception as e:
             print(e)
-            response_data['result'] = 'fail'
-            response_data['error_message'] = "the gift doesn't exist"
-            response_data['old_value'] = 0
+            response_data["result"] = "fail"
+            response_data["error_message"] = "the gift doesn't exist"
+            response_data["old_value"] = 0
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"

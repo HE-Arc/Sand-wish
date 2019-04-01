@@ -6,7 +6,7 @@
             {% csrf_token %}
             <p>Are you sure you want to delete "{{ object }}"?</p>
             <input type="submit" value="Confirm" />
-            <a href="{% url 'wishlist' username=wishlists_owner.username pk=wishlist_to_remove.id %}" class="btn btn-danger">Cancel</a>
+            <a href="{% url 'profile' wishlists_owner.username %}" class="btn btn-danger">Cancel</a>
         </form>
     </div>
 {% endblock %}

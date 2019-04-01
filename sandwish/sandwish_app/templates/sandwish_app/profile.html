@@ -30,7 +30,7 @@
                             Show the wishlist
                         </a>
                         {% if is_profiles_owner %}
-                            <a href="{% url 'wishlist-delete' w.id %}" class="btn btn-danger">x</a>
+                            <a href="{% url 'wishlist-delete' username=w.fk_user.username pk=w.id %}" class="btn btn-danger">x</a>
                         {% endif %}
                     </div>
                 </div>

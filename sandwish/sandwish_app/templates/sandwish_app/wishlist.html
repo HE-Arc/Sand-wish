@@ -29,7 +29,7 @@
         {% if gift.0.validated %}
             <div class="gift-item border rounded shadow-sm my-2 alert-success">
         {% else %}
-        <div class="gift-item border rounded shadow-sm my-2">
+            <div class="gift-item border rounded shadow-sm my-2">
         {% endif %}
 
         <!-- Gift's image -->
@@ -91,10 +91,10 @@
 
             <!-- Control buttons for validation and deletion -->
             {% if is_wishlists_owner %}
-                {% if not gift.0.validated and gift.1 == gift.0.price %}
-                    <a href="{% url 'gift-validate' gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>
+                {% if not gift.0.validated %}
+                    <a href="{% url 'gift-validate' username=wishlist.fk_user.username w_pk=wishlist.id pk=gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>
                 {% endif %}
-                <a href="{% url 'gift-delete' gift.0.id %}" class="btn btn-danger btn-sm"><img src="{% static 'icons/delete-icon.png' %}" /></a>
+                <a href="{% url 'gift-delete' username=wishlist.fk_user.username w_pk=wishlist.id pk=gift.0.id %}" class="btn btn-danger btn-sm"><img src="{% static 'icons/delete-icon.png' %}" /></a>
             {% endif %}
         </div>
     </div>
