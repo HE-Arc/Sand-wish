@@ -43,7 +43,7 @@
             <div>{{ gift.0.price }}</div>
 
             <!-- Progress bar -->
-            {% if not gift.0.validated and not is_wishlists_owner %}
+            {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
                 <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
