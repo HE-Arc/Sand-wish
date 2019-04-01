@@ -1,6 +1,11 @@
 {% extends "sandwish_app/base_generic.html" %}
 
 {% block content %}
-  <p>Logged out!</p>
-  <a href="{% url 'index'%}">Go back to homepage.</a>
+  <div class="border rounded mt-2 p-3 bg-white">
+      <h1>Logged out!</h1>
+      <form action="" method="post">
+          {% csrf_token %}
+          <a href="{% url 'index'%}" class="btn btn-success mt-2">Go back to homepage</a>
+      </form>
+  </div>
 {% endblock %}
