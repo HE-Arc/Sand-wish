@@ -3,40 +3,15 @@
     <head>
         <meta charset="utf-8">
         {% load static %}
-
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/home.css' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="{% static 'images/favicon.ico' %}" />
         {% block title %}<title>Sand'Wish</title>{% endblock %}
         {% load bootstrap4 %}
         {% bootstrap_css %}
         {% bootstrap_javascript jquery='full' %}
         {% load widget_tweaks %}
 
-        <style>
-            body, html {
-                height: 100%;
-            }
-
-            .bg-image {
-                left: 0;
-                position: absolute;
-                top: 0;
-                width: 100%;
-                z-index: -1;
-                /*filter: blur(8px);
-                -webkit-filter: blur(8px);*/
-
-                opacity: 0.05;
-                height: 100%;
-                background-size: 200px;
-
-            }
-
-            #title{
-                font-size:15vw;
-                text-align: center;
-                font-weight: bold;
-            }
-        </style>
     </head>
     <body>
         <div class="bg-image" style="background-image: url({% static 'images/logo-grey.png' %})"></div>
@@ -50,17 +25,17 @@
             <div class="row justify-content-md-center">
                 {% include "sandwish_app/searchbar_home.html" %}
             </div>
-            <div class="row justify-content-md-center px-3 pt-3 pt-md-4">
-                <div id="search-results"></div>
+            <div class="row px-3 pt-3 pt-md-4">
+                <ul id="search-results" class="list-group col-12 col-md-6 p-0 mb-3"></ul>
                 {% if user.is_authenticated %}
-                    <div class="col-6 col-md-5 col-lg-3 p-0 pr-1">
+                    <div class="col-6 col-md-3 p-0 pr-1 pl-md-2">
                         <a class="btn btn-success btn-lg w-100" href="{% url 'profile' user.get_username %}" role="button"> {{ user.get_username }} </a>
                     </div>
-                    <div class="col-6 col-md-5 col-lg-3 p-0 pl-1">
+                    <div class="col-6 col-md-3 p-0 pl-1">
                         <a class="btn btn-danger btn-lg w-100" href="{% url 'logout'%}" role="button">logout</a>
                     </div>
                 {% else %}
-                    <div class="col-12 col-md-6 col-lg-4 p-0">
+                    <div class="col-12 col-md-3 offset-md-3 p-0">
                         <a class="btn btn-success btn-lg w-100" href="{% url 'login'%}">Login</a>
                     </div>
                 {% endif %}

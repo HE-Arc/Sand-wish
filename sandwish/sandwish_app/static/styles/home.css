@@ -1,0 +1,28 @@
+body, html {
+    height: 100%;
+}
+
+.bg-image {
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+    /*filter: blur(8px);
+    -webkit-filter: blur(8px);*/
+
+    opacity: 0.05;
+    height: 100%;
+    background-size: 200px;
+
+}
+
+li a {
+    font-size: 20px;
+}
+
+#title{
+    font-size:15vw;
+    text-align: center;
+    font-weight: bold;
+}
