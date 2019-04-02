@@ -1,13 +1,60 @@
-{% extends "sandwish_app/base_generic.html" %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        {% load static %}
 
-{% block content %}
-<div>Home</div>
-    <div id="search-results"></div>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block title %}<title>Sand'Wish</title>{% endblock %}
+        {% load bootstrap4 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript jquery='full' %}
+        {% load widget_tweaks %}
 
-    {% if user.is_authenticated %}
-        User: {{ user.get_username }}
-        <a href="{% url 'logout'%}">Logout</a>
-    {% else %}
-        <a href="{% url 'login'%}">Login</a>
-    {% endif %}
-{% endblock %}
+        <style>
+            body, html {
+                height: 100%;
+            }
+
+            .bg-image {
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+                z-index: -1;
+
+                background-image: url("{% static 'images/logo-black.png' %}");
+
+                filter: blur(8px);
+                -webkit-filter: blur(8px);
+
+                height: 100%;
+
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            #title{
+                font-size:10vw;
+                text-align: center;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="bg-image"></div>
+        <section id="home-section" class="container">
+            <div class="row justify-content-md-center mt-5  ">
+                <div id="title" class="col-sm-12">Sand'wish</div>
+                {% include "sandwish_app/searchbar_home.html" %}
+
+                {% if user.is_authenticated %}
+                    <a class="btn btn-success col-sm-6 col-md-4 col-lg-3" href="{% url 'profile' user.get_username %}" role="button"> {{ user.get_username }} </a>
+                    <a class="btn btn-danger col-sm-6 col-md-4 col-lg-3" href="{% url 'logout'%}" role="button">logout</a>
+                {% else %}
+                    <a class="btn btn-success my-2 my-sm-0" href="{% url 'login'%}">Login</a>
+                {% endif %}
+            </div>
+        </section>
+    </body>
+</html>

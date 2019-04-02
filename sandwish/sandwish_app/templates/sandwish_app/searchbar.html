@@ -5,14 +5,16 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="{% static 'scripts/searchbar.js' %}"></script>
 
-<form class="" id="search-form" method="post" action="{% url 'search' %}" onsubmit="search('{{ csrf_token }}')">
-    {% csrf_token %}
-    <div class="input-group mr-3">
-        <input type="search" class="form-control" id="search-field" value="{{ search }}" pattern="^[\w-]+$" placeholder="Search username...">
-        <div class="input-group-append">
-            <button type="submit" class="btn btn-primary" id="search-btn" onclick="searchBtnClick('{{ csrf_token }}')">
-                <img class="icon-sm" src="{% static 'icons/search-icon.png' %}" />
-            </button>
+<div id="header-searchbar-container">
+    <form class="" id="search-form" method="post" action="{% url 'search' %}" onsubmit="search('{{ csrf_token }}')">
+        {% csrf_token %}
+        <div class="input-group mr-3">
+            <input type="search" class="form-control" id="search-field" value="{{ search }}" pattern="^[\w-]+$" placeholder="Search username...">
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary" id="search-btn" onclick="searchBtnClick('{{ csrf_token }}')">
+                    <img class="icon-sm" src="{% static 'icons/search-icon.png' %}" />
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
