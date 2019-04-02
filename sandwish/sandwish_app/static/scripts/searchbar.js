@@ -29,7 +29,7 @@ function initEvents() {
     });
 
     searchField.on("input", _ => {
-        searchField[0].setCustomValidity(""); 
+        searchField[0].setCustomValidity("");
         searchField[0].reportValidity();
     });
 
@@ -46,9 +46,9 @@ function searchBtnClick(crsftoken) {
             $.ajax({
                 url: "/search-redirect/",
                 type: "POST",
-                data: { 
+                data: {
                     search: encodeURIComponent(searchField.val()),
-                    csrfmiddlewaretoken: crsftoken 
+                    csrfmiddlewaretoken: crsftoken
                 },
                 success: data => window.location = data.url
             });
@@ -65,20 +65,20 @@ function search(crsftoken) {
     if (isSearchValid()) {
         if (event)
             event.preventDefault();
-        
+
         $.ajax({
             url: "/search/",
             type: "POST",
-            data: { 
+            data: {
                 search : searchField.val(),
-                csrfmiddlewaretoken : crsftoken 
+                csrfmiddlewaretoken : crsftoken
             },
             success : json => {
                 let results = JSON.parse(json["results"]);
-                
+
                 // order results by usernames alphabetical order
                 results.sort((a, b) => {
-                    let usernameA = a.fields.username.toLowerCase(); 
+                    let usernameA = a.fields.username.toLowerCase();
                     let usernameB = b.fields.username.toLowerCase();
                     return usernameA < usernameB ? 1 : usernameA > usernameB ? -1 : 0;
                 });
@@ -96,7 +96,7 @@ function search(crsftoken) {
                     displayInHomePage(html_result);
                 else
                     searchField.autocomplete({
-                        source: (request, response) => { 
+                        source: (request, response) => {
                             // source of this trick to set the max number of results : https://stackoverflow.com/a/7617637
                             let results = $.ui.autocomplete.filter(autocompleteSource, request.term);
                             response(results.slice(0, 10));
@@ -114,7 +114,7 @@ function search(crsftoken) {
  * @param {String} searched_user : username matching seach pattern
  */
 function buildHtmlSearchResult(searched_user) {
-    let div = $("<div></div>");
+    let div = $("<li class=\"list-group-item\"></li>");
     let a = $("<a></a>").attr("href", "/" + encodeURIComponent(searched_user.username) + "/")
                         .text(searched_user.username);
     div.prepend(a);
@@ -129,7 +129,7 @@ function buildAutocompletionSearchResult(searched_user) {
     let username = htmlEntities(searched_user.username);
     autocompleteSource.push({ href: "/" + encodeURIComponent(searched_user.username) + "/",
                               value: username,
-                              label: username 
+                              label: username
                             });
 }
 
@@ -137,7 +137,7 @@ function buildAutocompletionSearchResult(searched_user) {
  * Returns true if the search is valid false otherwise.
  */
 function isSearchValid() {
-    return searchField.val().length > 0 && 
+    return searchField.val().length > 0 &&
            searchField.val().split(" ").length <= 1 &&
            $("#search-field")[0].reportValidity();
 }

@@ -46,7 +46,7 @@ def login_redirect(request):
 
 # - USERS VIEWS ----------------------------------------------------------------
 
-def create_contribution(request):
+def contribute(request):
     """
     Contribution form.
     Validates new contributions.
@@ -58,14 +58,14 @@ def create_contribution(request):
 
         response_data = {}
 
-        # check that the value is correct
+        # check that the value is bigger than 0 and that it isn't more than the gift's price (with the other contribution)
         currentContributionValue = 0
         for contribution in Contribution.objects.filter(fk_gift=gift.id).exclude(fk_user=request.user.id):
             currentContributionValue += contribution.value
 
         if float(value) < 1 or float(value) > (gift.price - currentContributionValue):
-            response_data['result'] = 'fail'
-            response_data['error_message'] = "the total contribution exceeded the price of the gift"
+            response_data["result"] = "fail"
+            response_data["error_message"] = "the total contribution exceeded the price of the gift"
             try:
                 contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
                 response_data["old_value"] = float(contribution.value)
@@ -76,6 +76,7 @@ def create_contribution(request):
                 content_type="application/json"
             )
 
+        # check if the user has already contribute, if so, it updates the contribution, if not it creates the contribution
         try:
             contribution = Contribution.objects.get(fk_gift=gift.id, fk_user=request.user.id)
             contribution.value = value
@@ -89,9 +90,9 @@ def create_contribution(request):
             response_data["result"] = "success"
         except Exception as e:
             print(e)
-            response_data['result'] = 'fail'
-            response_data['error_message'] = "the gift doesn't exist"
-            response_data['old_value'] = 0
+            response_data["result"] = "fail"
+            response_data["error_message"] = "the gift doesn't exist"
+            response_data["old_value"] = 0
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
@@ -195,7 +196,7 @@ class WishlistView(generic.DetailView):
         context["wishlist"] = self.object
         context["is_wishlists_owner"] = context["wishlists_owner"] == self.request.user
 
-        # retrieve gifts and their contributions
+        # retrieve gifts and information about it
         gifts = []
         for gift in Gift.objects.filter(fk_wishlist=context["wishlist"].id):
             full_gift = []
@@ -211,11 +212,11 @@ class WishlistView(generic.DetailView):
                 contributors.append(contribution.fk_user.username)
             full_gift.append(total_contribution)
             full_gift.append(user_contribution)
-            full_gift.append(gift.price - total_contribution + user_contribution)
-            full_gift.append(contributors)
-            full_gift.append((total_contribution - user_contribution) / gift.price * 100)
-            full_gift.append(user_contribution / gift.price * 100)
-            full_gift.append(total_contribution - user_contribution)
+            full_gift.append(gift.price - total_contribution + user_contribution) # max possible contribution for the current user
+            full_gift.append(contributors) # list of all the contributors
+            full_gift.append((total_contribution - user_contribution) / gift.price * 100) # percent value of the other user total contribution for the progress bar
+            full_gift.append(user_contribution / gift.price * 100) # percent value of the user contribution for the progress bar
+            full_gift.append(total_contribution - user_contribution) # value of the other user total contribution to display it in the progress bar
             gifts.append(full_gift)
         context["gifts"] = gifts
         return context

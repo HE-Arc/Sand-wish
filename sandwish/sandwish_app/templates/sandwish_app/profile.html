@@ -3,18 +3,18 @@
 {% block content %}
     <!-- Profile's header -->
     <div class="mt-2">
-        <h1>{{ profiles_owner.get_username }}'s profile</h1>
+
         {% if user.is_authenticated %}
             {% if is_profiles_owner %}
+                <h1 class="mt-4">Your wishlists</h1>
                 {% include "sandwish_app/wishlist_form.html" %}
                 </div>
-                <h2 class="mt-4">Your wishlists</h2>
             {% else %}
+                <h1 class="mt-4">{{ profiles_owner.get_username }}'s wishlists</h1>
                 </div>
-                <h2 class="mt-4">User's wishlists</h2>
             {% endif %}
         {% else %}
-            <h2 class="mt-4">User's wishlists</h2>
+            <h1 class="mt-4">{{ profiles_owner.get_username }}'s wishlists</h1>
         {% endif %}
     <hr>
 
@@ -30,7 +30,7 @@
                             Show the wishlist
                         </a>
                         {% if is_profiles_owner %}
-                            <a href="{% url 'wishlist-delete' w.id %}" class="btn btn-danger">x</a>
+                            <a href="{% url 'wishlist-delete' username=w.fk_user.username pk=w.id %}" class="btn btn-danger">x</a>
                         {% endif %}
                     </div>
                 </div>

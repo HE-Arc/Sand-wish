@@ -29,7 +29,7 @@
         {% if gift.0.validated %}
             <div class="gift-item border rounded shadow-sm my-2 alert-success">
         {% else %}
-        <div class="gift-item border rounded shadow-sm my-2">
+            <div class="gift-item border rounded shadow-sm my-2 bg-white">
         {% endif %}
 
         <!-- Gift's image -->
@@ -39,13 +39,11 @@
 
         <!-- Gift's information -->
         <div class="gift-infos">
-            <h4>{{ gift.0.name }}</h4>
-            <div>{{ gift.0.price }}</div>
+            <h4 class="mt-2">{{ gift.0.name }} - <span style="color: grey">{{ gift.0.price }} CHF</span></h4>
 
             <!-- Progress bar -->
             {% if user.is_authenticated and not is_wishlists_owner and not gift.0.validated %}
-                <div id="full_contribution{{ gift.0.id }}"> {{ gift.1 }} </div>
-                <div class="progress">
+                <div class="progress my-3">
                     <div class="progress-bar" role="progressbar" style="width: {{ gift.5 }}%" >{{ gift.7 }}</div>
                     <div id="user-progress-bar{{ gift.0.id }}" class="progress-bar bg-success" role="progressbar" style="width: {{ gift.6 }}%">{{ gift.2 }}</div>
                 </div>
@@ -59,27 +57,7 @@
             <!-- Contributors -->
             {% if gift.0.validated %}
                 <br>
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#contributors">Show contributors</button>
-                <div id="contributors" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Contributors for {{ gift.0 }}</h4>
-                            </div>
-                            <div class="modal-body">
-                                <ul>
-                                    {% for contributor in gift.4 %}
-                                        <li>{{ contributor }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include "sandwish_app/contributor_popup.html" %}
             {% endif %}
         </div>
 
@@ -91,10 +69,10 @@
 
             <!-- Control buttons for validation and deletion -->
             {% if is_wishlists_owner %}
-                {% if not gift.0.validated and gift.1 == gift.0.price %}
-                    <a href="{% url 'gift-validate' gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>
+                {% if not gift.0.validated %}
+                    <a href="{% url 'gift-validate' username=wishlist.fk_user.username w_pk=wishlist.id pk=gift.0.id %}" class="btn btn-primary btn-sm"><img src="{% static 'icons/validate-icon.png' %}" /></a>
                 {% endif %}
-                <a href="{% url 'gift-delete' gift.0.id %}" class="btn btn-danger btn-sm"><img src="{% static 'icons/delete-icon.png' %}" /></a>
+                <a href="{% url 'gift-delete' username=wishlist.fk_user.username w_pk=wishlist.id pk=gift.0.id %}" class="btn btn-danger btn-sm"><img src="{% static 'icons/delete-icon.png' %}" /></a>
             {% endif %}
         </div>
     </div>

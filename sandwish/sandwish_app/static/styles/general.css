@@ -45,6 +45,11 @@ body {
     height: 20px;
 }
 
+.icon-md {
+    width: 30px;
+    height: 30px;
+}
+
 .bg-white{
     background-color: #FFF;
 }
