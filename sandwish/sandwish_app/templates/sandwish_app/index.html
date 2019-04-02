@@ -28,7 +28,7 @@
             <div class="row px-3 pt-3 pt-md-4">
                 <ul id="search-results" class="list-group col-12 col-md-6 p-0 mb-3"></ul>
                 {% if user.is_authenticated %}
-                    <div class="col-6 col-md-3 p-0 pr-1">
+                    <div class="col-6 col-md-3 p-0 pr-1 pl-md-2">
                         <a class="btn btn-success btn-lg w-100" href="{% url 'profile' user.get_username %}" role="button"> {{ user.get_username }} </a>
                     </div>
                     <div class="col-6 col-md-3 p-0 pl-1">
