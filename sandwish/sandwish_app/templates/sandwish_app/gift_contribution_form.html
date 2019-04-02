@@ -1,7 +1,7 @@
 <div class="gift-contribution">
     <form method="POST" action="{% url 'create-contribution' %}" id="post-form{{ gift.0.id }}" class="contrib-form" onsubmit="contributionSubmit('{{ gift.0.id }}', '{{ gift.0.price }}', '{{ csrf_token }}')">
         {% csrf_token %}
-        <div class="input-group  w-50">
+        <div class="input-group  w-100" style="max-width : 300px; float: right;">
             <input type="number" id="contribution{{ gift.0.id }}", step="0.5", value="{{ gift.2 }}" min="1.0" max="{{ gift.3 }}" required class="form-control">
             <div class="input-group-append">
                 <input type="submit" value="Contribute" class="btn btn-dark">
