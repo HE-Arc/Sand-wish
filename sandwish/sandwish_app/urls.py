@@ -26,7 +26,7 @@ urlpatterns = [
     path("<slug:username>/wishlist/<int:pk>/gift/create", views.GiftCreateView.as_view(), name="gift-create"),
     path("<slug:username>/wishlist/<int:w_pk>/gift/<int:pk>/delete", views.GiftDeleteView.as_view(), name="gift-delete"),
     path("<slug:username>/wishlist/<int:w_pk>/gift/<int:pk>/validate", views.GiftValidateView.as_view(), name="gift-validate"),
-    
+
     # contribution
-    path("contribution/create/", views.create_contribution, name="create-contribution"),
+    path("contribution/create/", views.contribute, name="create-contribution"),
 ]
