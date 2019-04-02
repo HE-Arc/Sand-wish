@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from sandwish_app.views import index, search, ProfileView, WishlistView, WishlistDeleteView, GiftCreateView, GiftDeleteView, GiftValidateView, create_contribution
+from sandwish_app.views import index, search, ProfileView, WishlistView, WishlistDeleteView, GiftCreateView, GiftDeleteView, GiftValidateView, contribute
 
 class TestUrls(SimpleTestCase):
     """
@@ -45,4 +45,4 @@ class TestUrls(SimpleTestCase):
     
     def test_contribution_create_url_resolves(self):
         url = reverse("create-contribution")
-        self.assertEquals(resolve(url).func, create_contribution)
+        self.assertEquals(resolve(url).func, contribute)
