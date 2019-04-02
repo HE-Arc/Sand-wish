@@ -114,7 +114,7 @@ function search(crsftoken) {
  * @param {String} searched_user : username matching seach pattern
  */
 function buildHtmlSearchResult(searched_user) {
-    let div = $("<div></div>");
+    let div = $("<li class=\"list-group-item\"></li>");
     let a = $("<a></a>").attr("href", "/" + encodeURIComponent(searched_user.username) + "/")
                         .text(searched_user.username);
     div.prepend(a);
