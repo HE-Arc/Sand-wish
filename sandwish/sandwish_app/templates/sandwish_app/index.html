@@ -16,11 +16,22 @@
     <body>
         <div class="bg-image" style="background-image: url({% static 'images/logo-grey.png' %})"></div>
         <section id="home-section" class="container pt-5">
-            <div class="row justify-content-md-center px-3 pt-3">
+            <div class="row justify-content-md-center px-3 pt-0">
                 <div class="col-12 col-md-10 col-lg-8">
                     <!--<div id="title">Sand'wish</div>-->
                     <img width="100%" src="{% static 'images/name.png' %}"/>
                 </div>
+            </div>
+            <div class="text">
+                <h1>Welcome on Sand'wish!</h1>
+                <p>Sand'wish regroups your wishlists for your events as well as for your friends. You can create a wishlist and add some personalized gifts.
+                Your friends can then contribute partially or totally to the amount of gifts they choose. Once received you can mark a gift as validated so everyone knows you got it.
+                 Of course once received you will be able to see who contributed.</p>
+
+                <h2>Start now!</h2>
+                <p>You can naviguate this website without an account but won't be able to create wishlists or contribute to gifts.
+
+                Sign up to start now or search a user by his username to see his wishlists.</p>
             </div>
             <div class="row justify-content-md-center">
                 {% include "sandwish_app/searchbar_home.html" %}

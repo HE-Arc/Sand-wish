@@ -60,4 +60,4 @@ class GiftCreationForm(forms.ModelForm):
 
     class Meta:
         model = Gift
-        fields = ["name", "image", "price", "link"]
+        fields = ["name", "price", "image", "link"]

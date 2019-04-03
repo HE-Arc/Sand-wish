@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     # general
-    path("admin/", admin.site.urls),
+    #path("admin/", admin.site.urls), # commented for production
     path("", views.index, name="index"),
     path("signup/", views.signup, name="signup"),
     path("login_redirect/", views.login_redirect, name="login_redirect"),
